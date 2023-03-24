@@ -8,9 +8,14 @@ function Login() {
       <div className="absolute w-80 h-80 rounded-full bg-[#5AC583] bottom-0 left-0 translate-x-[20%] -translate-y-[20%]"></div>
       <div className="flex flex-col gap-20">
         <motion.h1
-          initial={{ opacity: 0, x: -100 }}
+          initial={{ opacity: 0, x: -200 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 20,
+            delay: 0.5,
+          }}
           className="text-5xl font-bold text-white"
         >
           Connect your Wallet
@@ -22,7 +27,7 @@ function Login() {
             type: "spring",
             stiffness: 260,
             damping: 20,
-            delay: 1,
+            delay: 0.5,
           }}
           className="flex justify-between"
         >
