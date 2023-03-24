@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 function Login() {
   return (
     <div className="bg-[#4ABF78] h-screen flex justify-center items-center relative overflow-hidden">
-      <div className="absolute w-80 h-80 rounded-full bg-[#5AC583] top-0 right-0 translate-x-[20%] -translate-y-[20%]"></div>
-      <div className="absolute w-80 h-80 rounded-full bg-[#5AC583] bottom-0 left-0 translate-x-[20%] -translate-y-[20%]"></div>
-      <div className="flex flex-col gap-20">
+      <div className="-z-0 absolute w-80 h-80 rounded-full bg-[#5AC583] top-0 right-0 translate-x-[20%] -translate-y-[20%]"></div>
+      <div className="-z-0 absolute w-80 h-80 rounded-full bg-[#5AC583] bottom-0 left-0 translate-x-[20%] -translate-y-[20%]"></div>
+      <div className="z-10 relative flex flex-col gap-20">
         <motion.h1
           initial={{ opacity: 0, x: -200 }}
           animate={{ opacity: 1, x: 0 }}
