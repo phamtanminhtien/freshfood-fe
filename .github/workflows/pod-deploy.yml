@@ -77,4 +77,4 @@ jobs:
             # Remove old container
             docker rm ${{ secrets.CONTAINER_NAME }}
             # Run container
-            docker run -p ${{ secrets.PORT }}:${{ env.CONTAINER_PORT }} --name=${{ secrets.CONTAINER_NAME }} --restart=always -v /my/data/dir:/var/lib/${{ secrets.CONTAINER_NAME }} -d ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }Ơ
+            docker run -p ${{ secrets.PORT }}:${{ env.CONTAINER_PORT }} --name=${{ secrets.CONTAINER_NAME }} --restart=always -v /my/data/dir:/var/lib/${{ secrets.CONTAINER_NAME }} -d ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
