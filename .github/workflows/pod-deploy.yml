@@ -15,7 +15,7 @@ on:
         required: true
 #2
 env:
-  IMAGE_NAME: 'mxc-manager-fe'
+  IMAGE_NAME: 'fresh-food-fe'
   REGISTRY: 'registry.minhxinchao.com'
   CONTAINER_PORT: 80
 
