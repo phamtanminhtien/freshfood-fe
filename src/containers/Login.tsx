@@ -1,8 +1,36 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import { ethers } from "ethers";
+import { notification } from "antd";
+import { connectWallet, useEth } from "../stores/eth/ethSlice";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 function Login() {
+  const history = useHistory();
+
+  const handleConnectWallet = async () => {
+    if (window.ethereum) {
+      try {
+        await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        history.push("/home");
+      } catch (error) {
+        console.log(error);
+        notification.error({
+          message: "Error",
+          description: "Please connect your wallet",
+        });
+      }
+    } else {
+      notification.error({
+        message: "Error",
+        description: "Please install Metamask",
+      });
+    }
+  };
+
   return (
     <div className="bg-[#4ABF78] h-screen flex justify-center items-center relative overflow-hidden">
       <div className="-z-0 absolute w-80 h-80 rounded-full bg-[#5AC583] top-0 right-0 translate-x-[20%] -translate-y-[20%]"></div>
@@ -40,6 +68,7 @@ function Login() {
               borderRadius: "100%",
             }}
             className="bg-white p-5 rounded-lg cursor-pointer select-none"
+            onClick={handleConnectWallet}
           >
             <svg
               width="82"
@@ -48,7 +77,7 @@ function Login() {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <g clip-path="url(#clip0_1_31)">
+              <g clipPath="url(#clip0_1_31)">
                 <path
                   d="M80.0993 0L44.9138 26.0771L51.4568 10.709L80.0993 0Z"
                   fill="#E17726"
@@ -190,8 +219,8 @@ function Login() {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M41 0C63.6461 0 82 18.3539 82 41C82 63.6461 63.6461 82 41 82C18.3539 82 0 63.6461 0 41C0 18.3539 18.3539 0 41 0Z"
                 fill="url(#paint0_radial_1_103)"
               />
@@ -208,8 +237,8 @@ function Login() {
                   gradientUnits="userSpaceOnUse"
                   gradientTransform="translate(0.000254154 41.0013) scale(82)"
                 >
-                  <stop stop-color="#5D9DF6" />
-                  <stop offset="1" stop-color="#006FFF" />
+                  <stop stopColor="#5D9DF6" />
+                  <stop offset="1" stopColor="#006FFF" />
                 </radialGradient>
               </defs>
             </svg>
