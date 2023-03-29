@@ -1,6 +1,9 @@
 import { ethers } from "ethers";
 
-export type OwnerInfo = {};
+export type OwnerInfo = {
+  name: string;
+  description: string;
+};
 
 export type EthState = {
   account: string | null;
@@ -9,4 +12,5 @@ export type EthState = {
   isSignIn: boolean;
   isLoading: boolean;
   isOwnerRegistered: boolean;
+  contractAddress: string;
 };

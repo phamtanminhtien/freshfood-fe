@@ -79,7 +79,8 @@ export interface FreshFoodInterface extends utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getLogs(uint256)": FunctionFragment;
-    "getOwner(address)": FunctionFragment;
+    "getOwner()": FunctionFragment;
+    "getOwnerByAddress(address)": FunctionFragment;
     "getOwnerListFromProduct(uint256)": FunctionFragment;
     "getProduct(uint256)": FunctionFragment;
     "getProductByOwner(address)": FunctionFragment;
@@ -113,6 +114,7 @@ export interface FreshFoodInterface extends utils.Interface {
       | "getApproved"
       | "getLogs"
       | "getOwner"
+      | "getOwnerByAddress"
       | "getOwnerListFromProduct"
       | "getProduct"
       | "getProductByOwner"
@@ -166,8 +168,9 @@ export interface FreshFoodInterface extends utils.Interface {
     functionFragment: "getLogs",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(functionFragment: "getOwner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "getOwner",
+    functionFragment: "getOwnerByAddress",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -273,6 +276,10 @@ export interface FreshFoodInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "getLogs", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getOwner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getOwnerByAddress",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getOwnerListFromProduct",
     data: BytesLike
@@ -458,7 +465,9 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[LogStructOutput[]]>;
 
-    getOwner(
+    getOwner(overrides?: CallOverrides): Promise<[OwnerStructOutput]>;
+
+    getOwnerByAddress(
       _ownerAddr: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[OwnerStructOutput]>;
@@ -613,7 +622,9 @@ export interface FreshFood extends BaseContract {
     overrides?: CallOverrides
   ): Promise<LogStructOutput[]>;
 
-  getOwner(
+  getOwner(overrides?: CallOverrides): Promise<OwnerStructOutput>;
+
+  getOwnerByAddress(
     _ownerAddr: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<OwnerStructOutput>;
@@ -768,7 +779,9 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<LogStructOutput[]>;
 
-    getOwner(
+    getOwner(overrides?: CallOverrides): Promise<OwnerStructOutput>;
+
+    getOwnerByAddress(
       _ownerAddr: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<OwnerStructOutput>;
@@ -825,7 +838,7 @@ export interface FreshFood extends BaseContract {
       _name: PromiseOrValue<string>,
       _description: PromiseOrValue<string>,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<OwnerStructOutput>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -966,7 +979,9 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getOwner(
+    getOwner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getOwnerByAddress(
       _ownerAddr: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1116,7 +1131,9 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getOwner(
+    getOwner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getOwnerByAddress(
       _ownerAddr: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

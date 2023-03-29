@@ -14,7 +14,6 @@ function PrivateRoute(props: RouteProps) {
   const history = useHistory();
 
   useEffect(() => {
-    console.log(eth);
     if (!eth.account) {
       history.push("/");
     }

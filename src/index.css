@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ant-btn-primary {
+  background-color: #1677ff !important;
+}
+
+.ant-btn-primary:hover {
+  background-color: #4096ff !important;
+}
+
+.ant-steps
+  .ant-steps-item-custom
+  > .ant-steps-item-container
+  > .ant-steps-item-icon
+  > .ant-steps-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ant-form-item-label {
+  text-align: unset !important;
+}
+
+body {
+  background-image: url(./assets/farmservice.png);
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  background-position: center;
+  background-size: cover;
+  backdrop-filter: brightness(0.7);
+}
