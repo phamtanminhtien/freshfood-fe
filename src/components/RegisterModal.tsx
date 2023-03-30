@@ -1,62 +1,54 @@
-import { Button, Form, Input, Modal, notification, Steps } from "antd";
-import React from "react";
 import {
-  getContract,
-  setOwnerInfo,
-  setState,
-  useEth,
-} from "../stores/eth/ethSlice";
-import {
-  UserOutlined,
-  SolutionOutlined,
   LoadingOutlined,
   SmileOutlined,
+  SolutionOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
+import { Button, Form, Input, Modal, notification, Steps } from "antd";
+import { ethers } from "ethers";
+import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
+import { getContract, setEthState, useEth } from "../stores/eth/ethSlice";
 
 type FromProps = {
   name: string;
   description: string;
 };
 
-type Props = {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-};
-
-function RegisterModal(props: Props) {
+function RegisterModal() {
   const eth = useEth();
   const [form] = Form.useForm<FromProps>();
   const [loading, setLoading] = React.useState(false);
-  const contract = getContract();
   const dispatch = useDispatch();
 
-  const handleSubmit = async (value: FromProps) => {
-    try {
+  const handleSubmit = useCallback(
+    async (value: FromProps) => {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const contract = getContract();
       setLoading(true);
-      await contract?.registerOwner(value.name, value.description, {
+      const res = await contract.registerOwner(value.name, value.description, {
         from: eth.account as string,
       });
-      const owner = await contract?.getOwner({
+      await provider.waitForTransaction(res.hash);
+      const owner = await contract.getOwner({
         from: eth.account as string,
       });
-      if (!owner) throw new Error("Owner not found");
-
-      dispatch(setOwnerInfo(owner));
-      props.setOpen(false);
-      setLoading(false);
-    } catch (error: any) {
-      console.log(error);
-      notification.error({
-        message: "Error",
-        description: error.message,
-      });
-    }
-  };
+      dispatch(setEthState({ ownerInfo: owner, isLoading: false }));
+      try {
+      } catch (error: any) {
+        console.error(error);
+        notification.error({
+          message: "Error",
+          description: error.message,
+        });
+      }
+    },
+    [eth.account]
+  );
 
   return (
     <Modal
-      open={props.open}
+      open={!eth.ownerInfo?.name && !eth.isLoading}
       width={700}
       title="Verification is in progress"
       footer={null}

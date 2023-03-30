@@ -1,37 +1,34 @@
 import React from "react";
 import { motion } from "framer-motion";
-
-function Card() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5 }}
-      className="mx-auto container bg-white/90 rounded-lg shadow  backdrop-filter backdrop-blur-[20px]"
-    >
-      <div className="flex flex-col gap-2 p-4">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-thin">Card Title</h1>
-          <div className="flex gap-2">
-            <button className="bg-gray-200 rounded-lg p-2 hover:bg-gray-300">
-              Edit
-            </button>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
+import RegisterModal from "../../components/RegisterModal";
+import TopBar from "../../components/Topbar";
+import { Switch, useLocation, useParams } from "react-router-dom";
+import PrivateRoute from "../../components/PrivateRoute";
+import { useEth } from "../../stores/eth/ethSlice";
+import Menu from "../../components/Menu";
+import Product from "../Product";
 
 function Home() {
   return (
-    <div className="mx-auto container">
-      <div className="flex gap-2 mt-10">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-      </div>
+    <div className="flex">
+      <RegisterModal />
+
+      {
+        <>
+          <div className="">
+            <TopBar />
+            <div className="flex gap-2 p-2 items-start">
+              <Menu />
+              <Switch>
+                <PrivateRoute path={"/v1/dashboard"}>dashboard</PrivateRoute>
+                <PrivateRoute path={"/v1/product"}>
+                  <Product />
+                </PrivateRoute>
+              </Switch>
+            </div>
+          </div>
+        </>
+      }
     </div>
   );
 }

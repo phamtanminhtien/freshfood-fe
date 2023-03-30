@@ -1,21 +1,26 @@
-import React, { useEffect } from "react";
-import { motion } from "framer-motion";
-import { ethers } from "ethers";
 import { notification } from "antd";
-import { connectWallet, useEth } from "../stores/eth/ethSlice";
-import { useDispatch } from "react-redux";
+import { motion } from "framer-motion";
 import { useHistory } from "react-router-dom";
+import { setEthState } from "../stores/eth/ethSlice";
+import { useDispatch } from "react-redux";
+import { ethers, providers } from "ethers";
 
 function Login() {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleConnectWallet = async () => {
     if (window.ethereum) {
       try {
-        await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        history.push("/home");
+        const providers = new ethers.providers.Web3Provider(window.ethereum);
+        const accounts = await providers.send("eth_requestAccounts", []);
+
+        dispatch(
+          setEthState({
+            account: accounts[0],
+          })
+        );
+        history.push("/v1");
       } catch (error) {
         console.log(error);
         notification.error({

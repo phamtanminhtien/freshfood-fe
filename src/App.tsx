@@ -1,96 +1,86 @@
 import { ethers } from "ethers";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import PrivateRoute from "./components/PrivateRoute";
-import RegisterModal from "./components/RegisterModal";
-import SideBar from "./components/SideBar";
-import TopBar from "./components/Topbar";
 import Home from "./containers/Home";
 import Login from "./containers/Login";
 import {
-  connectNetwork,
-  connectWallet,
-  getContract,
-  setLoading,
-  setState,
-  signOut,
+  setEthState,
   useEth,
+  getContract,
+  overrideEthState,
 } from "./stores/eth/ethSlice";
-import { FreshFood__factory } from "./types";
 
 function App() {
   const dispatch = useDispatch();
   const eth = useEth();
-  const contract = getContract();
-  const [showRegisterModal, setShowRegisterModal] = React.useState(false);
+
+  console.log(eth);
 
   useEffect(() => {
     initContract();
   }, []);
 
   useEffect(() => {
-    if (eth.account) {
-      getInfo(eth.account);
-    }
+    getUserInfo();
   }, [eth.account]);
 
-  console.log(eth);
-
-  const getInfo = async (account: string) => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-    if (account) {
-      const owner = await FreshFood__factory.connect(
-        eth.contractAddress,
-        provider.getSigner()
-      ).getOwner({
-        from: account,
+  const getUserInfo = async () => {
+    try {
+      if (!eth.account) return;
+      const contract = getContract();
+      const owner = await contract.getOwner({
+        from: eth.account as string,
       });
 
-      if (owner && owner.name != "") {
-        dispatch(
-          setState({
-            isOwnerRegistered: true,
-            ownerInfo: owner,
-            account: account,
-            isLoading: false,
-          })
-        );
-        return;
-      }
-
-      setShowRegisterModal(true);
+      dispatch(
+        setEthState({
+          ownerInfo: owner,
+        })
+      );
+    } catch (error: any) {
+      console.error(error);
     }
+
+    dispatch(setEthState({ isLoading: false }));
   };
 
   const initContract = async () => {
     if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      try {
+        // get list of accounts
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const network = await provider.getNetwork();
 
-      const network = await provider.getNetwork();
+        dispatch(
+          setEthState({
+            network: network,
+          })
+        );
 
-      window.ethereum.on("accountsChanged", (accounts: string[]) => {
+        const accounts = await provider.listAccounts();
         if (accounts.length > 0) {
-          getInfo(accounts[0]);
-        } else {
-          dispatch(signOut());
+          dispatch(
+            setEthState({
+              account: accounts[0],
+            })
+          );
         }
-      });
-
-      dispatch(
-        connectNetwork({
-          network,
-        })
-      );
-
-      const accounts = await provider.listAccounts();
-      dispatch(connectWallet(accounts[0]));
+        // update account when user changes it
+        provider.on("accountsChanged", (accounts: string[]) => {
+          dispatch(
+            setEthState({
+              account: accounts[0],
+            })
+          );
+        });
+      } catch (error: any) {
+        console.error(error);
+      }
     } else {
-      console.log("No ethereum object found");
+      console.log("Please install MetaMask!");
     }
   };
-
   return (
     <Router>
       {!eth.isLoading && (
@@ -99,24 +89,16 @@ function App() {
             <Login />
           </Route>
 
-          <div className="flex">
-            <RegisterModal
-              open={showRegisterModal}
-              setOpen={setShowRegisterModal}
-            />
+          <Route path="/v1">
+            <Home />
+          </Route>
 
-            <SideBar />
-            <div className="">
-              <TopBar />
-              <div className="">
-                <Switch>
-                  <PrivateRoute exact path="/home">
-                    <Home />
-                  </PrivateRoute>
-                </Switch>
-              </div>
+          <Route path="*">
+            <div className="flex flex-col items-center justify-center h-screen text-white">
+              <h1 className="text-9xl font-bold">404</h1>
+              <h2 className="text-3xl font-bold">Page not found</h2>
             </div>
-          </div>
+          </Route>
         </Switch>
       )}
     </Router>

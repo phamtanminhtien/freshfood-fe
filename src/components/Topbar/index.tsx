@@ -1,6 +1,7 @@
 import { Avatar } from "antd";
 import React from "react";
 import { useEth } from "../../stores/eth/ethSlice";
+import { UserOutlined } from "@ant-design/icons";
 
 function TopBar() {
   const eth = useEth();
@@ -12,7 +13,12 @@ function TopBar() {
           <h1 className="text-4xl font-thin py-2">Logo</h1>
         </div>
         <div className="flex justify-center items-center gap-2">
-          <Avatar size={40}>U</Avatar>
+          <Avatar
+            size={40}
+            className="bg-[#4ABF78] flex justify-center items-center"
+          >
+            <UserOutlined className="flex justify-center items-center" />
+          </Avatar>
           <h2 className="text-lg font-thin py-2">{eth.ownerInfo?.name}</h2>
         </div>
       </div>
