@@ -1,8 +1,12 @@
+import { Link } from "react-router-dom";
 import { ProductStruct } from "../../../types/contracts/FreshFood";
 
 export function Card(props: { data: ProductStruct }) {
   return (
-    <div className="bg-white p-3 rounded-2xl shadow-lg">
+    <Link
+      className="bg-white p-3 rounded-2xl shadow-lg"
+      to={`/v1/product/${props.data.productId.toString()}`}
+    >
       <img
         src="https://cdn.mos.cms.futurecdn.net/sKbruCKdeZpKnNpcwf35fc-1200-80.jpg"
         className="h-32 w-full object-cover rounded-2xl"
@@ -18,6 +22,6 @@ export function Card(props: { data: ProductStruct }) {
           30 ngày
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

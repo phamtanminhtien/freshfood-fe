@@ -15,8 +15,6 @@ function App() {
   const dispatch = useDispatch();
   const eth = useEth();
 
-  console.log(eth);
-
   useEffect(() => {
     initContract();
   }, []);
@@ -67,7 +65,7 @@ function App() {
           );
         }
         // update account when user changes it
-        provider.on("accountsChanged", (accounts: string[]) => {
+        window.ethereum.on("accountsChanged", (accounts: string[]) => {
           dispatch(
             setEthState({
               account: accounts[0],

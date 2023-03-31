@@ -7,6 +7,7 @@ import PrivateRoute from "../../components/PrivateRoute";
 import { useEth } from "../../stores/eth/ethSlice";
 import Menu from "../../components/Menu";
 import Product from "../Product";
+import ProductDetail from "../Product/ProductDetail";
 
 function Home() {
   return (
@@ -14,20 +15,22 @@ function Home() {
       <RegisterModal />
 
       {
-        <>
-          <div className="">
-            <TopBar />
-            <div className="flex gap-2 p-2 items-start">
-              <Menu />
-              <Switch>
-                <PrivateRoute path={"/v1/dashboard"}>dashboard</PrivateRoute>
-                <PrivateRoute path={"/v1/product"}>
-                  <Product />
-                </PrivateRoute>
-              </Switch>
-            </div>
+        <div className="relative">
+          <TopBar />
+          <div className="flex gap-2 p-2 items-start relative">
+            <Menu />
+            <Switch>
+              <PrivateRoute path={"/v1/dashboard"}>dashboard</PrivateRoute>
+              <PrivateRoute exact path={"/v1/product"}>
+                <Product />
+              </PrivateRoute>
+
+              <PrivateRoute path={"/v1/product/:id"}>
+                <ProductDetail />
+              </PrivateRoute>
+            </Switch>
           </div>
-        </>
+        </div>
       }
     </div>
   );

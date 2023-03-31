@@ -32,3 +32,35 @@ body {
   background-size: cover;
   backdrop-filter: brightness(0.7);
 }
+.rdg {
+  background-color: #fff !important;
+  color: #000;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d9d9d9;
+  border-radius: 6px;
+}
+.rdg-cell {
+  background-color: #fff !important;
+  color: #000;
+
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d9d9d9;
+}
+.rdg-cell[role="columnheader"] {
+  background-color: #fbfbfb !important;
+  color: #000;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d9d9d9;
+}
+
+.rdg-cell input {
+  background-color: #fff !important;
+  color: #000;
+
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d9d9d9;
+}

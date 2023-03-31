@@ -7,7 +7,7 @@ function TopBar() {
   const eth = useEth();
 
   return (
-    <div className="bg-white w-screen shadow-md">
+    <div className="bg-white w-screen shadow-md h-[60px] flex justify-center items-center sticky top-0 z-10">
       <div className="container flex mx-auto justify-between items-center">
         <div className="">
           <h1 className="text-4xl font-thin py-2">Logo</h1>

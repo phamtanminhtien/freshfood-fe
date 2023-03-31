@@ -33,7 +33,7 @@ function Menu() {
   }, []);
 
   return (
-    <div className="w-60 flex gap-2 flex-col">
+    <div className="w-64 flex-shrink-0 flex gap-2 flex-col sticky top-[calc(60px+0.5rem)]">
       {menu_items.map((item, index) => {
         return (
           <Link to={item.path} key={index}>
