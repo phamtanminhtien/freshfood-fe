@@ -37,8 +37,10 @@ function ProductDetail() {
         {product?.logList.map((log, index) => {
           return (
             <Log
+              getProduct={getProduct}
               key={index}
               data={log}
+              id={id}
               showCreate={index === product?.logList.length - 1}
             />
           );

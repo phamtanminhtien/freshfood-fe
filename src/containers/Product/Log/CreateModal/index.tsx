@@ -3,10 +3,15 @@ import dayjs from "dayjs";
 import React, { useEffect, useMemo, useState } from "react";
 import "react-data-grid/lib/styles.css";
 import DataGrid, { Column, textEditor } from "react-data-grid";
+import { objectStoreService } from "../../../../services/objectStoreService";
+import { getContract, useEth } from "../../../../stores/eth/ethSlice";
+import { ethers } from "ethers";
 
 type Props = {
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
+  id: string;
+  getProduct: () => void;
 };
 
 type Row = {
@@ -48,16 +53,41 @@ function CreateModal(props: Props) {
       stt: 1,
     },
   ]);
+  const eth = useEth();
 
   const onClose = () => {
     props.setShowModal(false);
   };
 
   const onFinish = async (values: any) => {
-    console.log({
-      ...values,
-      table: rows,
-    });
+    try {
+      setLoading(true);
+      const contract = getContract();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+      const data = {
+        ...values,
+        date: dayjs(values.date).format("HH:mm:ss DD/MM/YYYY"),
+        table: rows.filter((row) => row.name && row.value),
+      };
+      const dataResult = await (await objectStoreService.post(data)).data;
+      const res = await contract.addLog(
+        props.id,
+        dataResult._id,
+        dataResult.hash,
+        "",
+        {
+          from: eth?.account as string,
+        }
+      );
+
+      await provider.waitForTransaction(res.hash);
+      setLoading(false);
+      props.getProduct();
+      props.setShowModal(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleOnRowsChange = (rows: Row[]) => {

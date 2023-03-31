@@ -28,13 +28,13 @@ import type {
 } from "../common";
 
 export type LogStruct = {
-  url: PromiseOrValue<string>;
+  objectId: PromiseOrValue<string>;
   hash: PromiseOrValue<string>;
   location: PromiseOrValue<string>;
 };
 
 export type LogStructOutput = [string, string, string] & {
-  url: string;
+  objectId: string;
   hash: string;
   location: string;
 };

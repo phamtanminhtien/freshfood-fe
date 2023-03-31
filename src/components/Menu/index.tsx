@@ -27,7 +27,7 @@ function Menu() {
 
   useEffect(() => {
     const index = menu_items.findIndex(
-      (item) => item.path === location.pathname
+      (item) => location.pathname.indexOf(item.path) !== -1
     );
     setSelected(index);
   }, []);
