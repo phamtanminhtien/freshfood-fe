@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { FreshFood__factory } from "../../types";
 import { EthState, OwnerInfo } from "./eth.type";
 
-const CONTRACT_ADDRESS = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
+const CONTRACT_ADDRESS = import.meta.env.VITE_APP_CONTRACT_ADDRESS;
 
 export const initialState: { value: EthState } = {
   value: {
