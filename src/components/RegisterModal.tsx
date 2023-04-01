@@ -116,7 +116,12 @@ function RegisterModal() {
 
           <div className="flex justify-end">
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+                disabled={loading}
+              >
                 Submit
               </Button>
             </Form.Item>
