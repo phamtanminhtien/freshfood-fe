@@ -11,7 +11,7 @@ import {
   ObjectData,
   objectStoreService,
 } from "../../../services/objectStoreService";
-import * as hash from "object-hash";
+import hash from "object-hash";
 
 function Log({
   data,
