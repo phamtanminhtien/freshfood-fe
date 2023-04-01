@@ -48,13 +48,6 @@ function App() {
       try {
         // get list of accounts
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const network = await provider.getNetwork();
-
-        dispatch(
-          setEthState({
-            network: network,
-          })
-        );
 
         const accounts = await provider.listAccounts();
         if (accounts.length > 0) {
@@ -81,24 +74,24 @@ function App() {
   };
   return (
     <Router>
-      {!eth.isLoading && (
-        <Switch>
-          <Route exact path="/">
-            <Login />
-          </Route>
+      {/* {!eth.isLoading && ( */}
+      <Switch>
+        <Route exact path="/">
+          <Login />
+        </Route>
 
-          <Route path="/v1">
-            <Home />
-          </Route>
+        <Route path="/v1">
+          <Home />
+        </Route>
 
-          <Route path="*">
-            <div className="flex flex-col items-center justify-center h-screen text-white">
-              <h1 className="text-9xl font-bold">404</h1>
-              <h2 className="text-3xl font-bold">Page not found</h2>
-            </div>
-          </Route>
-        </Switch>
-      )}
+        <Route path="*">
+          <div className="flex flex-col items-center justify-center h-screen text-white">
+            <h1 className="text-9xl font-bold">404</h1>
+            <h2 className="text-3xl font-bold">Page not found</h2>
+          </div>
+        </Route>
+      </Switch>
+      {/* )} */}
     </Router>
   );
 }

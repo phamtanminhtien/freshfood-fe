@@ -11,7 +11,6 @@ export const initialState: { value: EthState } = {
     account: null,
     ownerInfo: null,
     isLoading: true,
-    network: null,
     contractAddress: CONTRACT_ADDRESS,
   },
 };
