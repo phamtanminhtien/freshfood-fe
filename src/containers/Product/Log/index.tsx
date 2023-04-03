@@ -11,7 +11,7 @@ import {
   ObjectData,
   objectStoreService,
 } from "../../../services/objectStoreService";
-import hash from "object-hash";
+import { hashObject } from "../../../utils/hash-object";
 
 function Log({
   data,
@@ -48,7 +48,9 @@ function Log({
     try {
       const res = await objectStoreService.get(data.objectId.toString());
       setObjectData(res.data);
-      setVerify(data.hash === hash(res.data));
+      setVerify(data.hash === hashObject(res.data));
+      console.log(res.data);
+      console.log(hashObject(res.data));
     } catch (error) {
       console.log(error);
     }
