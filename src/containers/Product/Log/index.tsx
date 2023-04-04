@@ -49,8 +49,6 @@ function Log({
       const res = await objectStoreService.get(data.objectId.toString());
       setObjectData(res.data);
       setVerify(data.hash === hashObject(res.data));
-      console.log(res.data);
-      console.log(hashObject(res.data));
     } catch (error) {
       console.log(error);
     }

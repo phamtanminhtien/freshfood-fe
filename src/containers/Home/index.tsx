@@ -8,6 +8,7 @@ import { useEth } from "../../stores/eth/ethSlice";
 import Menu from "../../components/Menu";
 import Product from "../Product";
 import ProductDetail from "../Product/ProductDetail";
+import Device from "../Device";
 
 function Home() {
   return (
@@ -27,6 +28,10 @@ function Home() {
 
               <PrivateRoute path={"/v1/product/:id"}>
                 <ProductDetail />
+              </PrivateRoute>
+
+              <PrivateRoute path={"/v1/device"}>
+                <Device />
               </PrivateRoute>
             </Switch>
           </div>

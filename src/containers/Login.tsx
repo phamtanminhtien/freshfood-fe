@@ -20,7 +20,8 @@ function Login() {
             account: accounts[0],
           })
         );
-        history.push("/v1");
+        localStorage.setItem("account", accounts[0]);
+        history.push("/v1/home");
       } catch (error) {
         console.log(error);
         notification.error({

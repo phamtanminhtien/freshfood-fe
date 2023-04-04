@@ -56,6 +56,7 @@ function App() {
               account: accounts[0],
             })
           );
+          localStorage.setItem("account", accounts[0]);
         }
         // update account when user changes it
         window.ethereum.on("accountsChanged", (accounts: string[]) => {
@@ -64,6 +65,7 @@ function App() {
               account: accounts[0],
             })
           );
+          localStorage.setItem("account", accounts[0]);
         });
       } catch (error: any) {
         console.error(error);

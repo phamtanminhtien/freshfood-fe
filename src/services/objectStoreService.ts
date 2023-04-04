@@ -23,8 +23,5 @@ export const objectStoreService = {
   post: (data: any) =>
     configuredAxios.post<ObjectStore>(API.OBJECT_STORE.POST, data),
   delete: (id: string) => configuredAxios.delete(API.OBJECT_STORE.DELETE(id)),
-  getAll: (id?: string) =>
-    configuredAxios.get(API.OBJECT_STORE.GET_ALL, {
-      id,
-    }),
+  getAll: () => configuredAxios.get(API.OBJECT_STORE.GET_ALL),
 };

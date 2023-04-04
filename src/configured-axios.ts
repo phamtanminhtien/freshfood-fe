@@ -5,7 +5,7 @@ type METHOD = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 async function requestAPI<T>(
   method: METHOD,
   url: string,
-  headers = {},
+  headers = {} as any,
   dataBody: any,
   config = {} as any
 ): Promise<AxiosResponse<T, any>> {
@@ -21,6 +21,13 @@ async function requestAPI<T>(
   } else {
     config.data = dataBody;
   }
+
+  const account = localStorage.getItem("account");
+
+  if (account) {
+    baseConfig.headers["Account"] = `${account}`;
+  }
+
   return axios<T>({
     ...baseConfig,
     ...config,

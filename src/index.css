@@ -64,3 +64,31 @@ body {
   border-style: solid;
   border-color: #d9d9d9;
 }
+
+.status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f5222d;
+}
+
+.status.active {
+  background: #52c41a;
+  animation: blink 1s linear infinite;
+}
+
+.status.blink-faster {
+  animation: blink 0.2s linear infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
