@@ -72,7 +72,7 @@ function DeviceList() {
         ))}
       </div>
       <div className="col-span-4">
-        <DeviceDetail id={deviceSelected} />
+        <DeviceDetail id={deviceSelected ? deviceSelected : undefined} />
       </div>
     </div>
   );
