@@ -76,7 +76,6 @@ function App() {
   };
   return (
     <Router>
-      {/* {!eth.isLoading && ( */}
       <Switch>
         <Route exact path="/">
           <Login />
@@ -93,7 +92,6 @@ function App() {
           </div>
         </Route>
       </Switch>
-      {/* )} */}
     </Router>
   );
 }

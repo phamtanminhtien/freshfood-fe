@@ -6,20 +6,23 @@ import { Link } from "react-router-dom";
 type Props = Device & {
   handleToggleActive: () => void;
   isToggleLoading: boolean;
+  onSelected: (id: string) => void;
+  id: string;
 };
 
 function DeviceCard({
   serial,
   active,
-  _id,
+  id,
   handleToggleActive,
   isToggleLoading,
+  onSelected,
 }: Props) {
   return (
-    <div className="shadow-sm bg-white rounded-lg py-10 flex flex-col gap-5">
-      <Link to={`device/${_id}`}>
+    <div className="shadow-lg bg-white rounded-lg py-10 flex flex-col gap-5">
+      <div onClick={() => onSelected(id)}>
         <h2 className="text-base font-bold text-center">{serial}</h2>
-      </Link>
+      </div>
       <div className="flex justify-center items-center">
         <div
           className={`status ${active ? "active" : ""} ${

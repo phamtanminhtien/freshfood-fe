@@ -25,12 +25,8 @@
 }
 
 body {
-  background-image: url(./assets/farmservice.png);
-  background-repeat: no-repeat;
   min-height: 100vh;
-  background-position: center;
-  background-size: cover;
-  backdrop-filter: brightness(0.7);
+  background: white;
 }
 .rdg {
   background-color: #fff !important;

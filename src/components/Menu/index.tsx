@@ -33,36 +33,26 @@ function Menu() {
   }, []);
 
   return (
-    <div className="w-64 flex-shrink-0 flex gap-2 flex-col sticky top-[calc(60px+0.5rem)]">
+    <div className="flex">
       {menu_items.map((item, index) => {
         return (
           <Link to={item.path} key={index}>
-            <motion.div
-              className=""
+            <div
+              className="h-[60px] flex justify-center items-center px-4 cursor-pointer"
               onClick={() => {
                 setSelected(index);
               }}
             >
-              <motion.div
-                animate={{ x: 0, opacity: 1 }}
-                initial={{ x: -100, opacity: 0 }}
-                transition={{ duration: 0.2, delay: index * 0.1 }}
-                className=""
-              >
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.9 }}
-                  className={`${
-                    selected === index ? "bg-[#4ABF78] text-white" : "bg-white"
-                  } p-4 rounded-md flex justify-between items-center cursor-pointer select-none`}
+              <div className="">
+                <div
+                  className={`font-extralight ${
+                    selected === index ? "text-[#4ABF78]" : "text-gray-700"
+                  } `}
                 >
                   <div className="">{item.name}</div>
-                  <div>
-                    <DoubleRightOutlined className="flex justify-center items-center" />
-                  </div>
-                </motion.div>
-              </motion.div>
-            </motion.div>
+                </div>
+              </div>
+            </div>
           </Link>
         );
       })}

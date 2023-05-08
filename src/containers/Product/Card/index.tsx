@@ -1,11 +1,16 @@
 import { Link } from "react-router-dom";
 import { ProductStruct } from "../../../types/contracts/FreshFood";
 
-export function Card(props: { data: ProductStruct }) {
+type Props = {
+  data: ProductStruct;
+  handleSelect: (id: string) => void;
+};
+
+export function Card(props: Props) {
   return (
-    <Link
-      className="bg-white p-3 rounded-2xl shadow-lg"
-      to={`/v1/product/${props.data.productId.toString()}`}
+    <div
+      className="bg-white p-3 rounded-2xl shadow-lg cursor-pointer"
+      onClick={() => props.handleSelect(props.data.productId.toString())}
     >
       <img
         src="https://cdn.mos.cms.futurecdn.net/sKbruCKdeZpKnNpcwf35fc-1200-80.jpg"
@@ -22,6 +27,6 @@ export function Card(props: { data: ProductStruct }) {
           30 ngày
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

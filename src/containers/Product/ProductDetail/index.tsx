@@ -4,9 +4,14 @@ import { getContract, useEth } from "../../../stores/eth/ethSlice";
 import { ProductStruct } from "../../../types/contracts/FreshFood";
 import Log from "../Log";
 
-function ProductDetail() {
-  const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = React.useState<ProductStruct | null>(null);
+type Props = {
+  id?: string;
+};
+
+function ProductDetail({ id: idFromProps }: Props) {
+  const params = useParams<{ id: string }>();
+  const id = idFromProps || params.id;
+  const [product, setProduct] = React.useState<ProductStruct | null>();
   const [loading, setLoading] = React.useState<boolean>(false);
   const eth = useEth();
 
@@ -14,7 +19,7 @@ function ProductDetail() {
     if (eth && id) {
       getProduct();
     }
-  }, [eth]);
+  }, [eth, id]);
 
   const getProduct = async () => {
     try {
@@ -27,6 +32,13 @@ function ProductDetail() {
       console.log(error);
     }
   };
+
+  if (loading)
+    return (
+      <div className="rounded bg-white p-2 w-full">
+        <h1 className="text-2xl font-bold text-center py-5">Loading...</h1>
+      </div>
+    );
 
   return (
     <div className="rounded bg-white p-2 w-full">

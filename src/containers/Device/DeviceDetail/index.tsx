@@ -9,8 +9,13 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { useEth } from "../../../stores/eth/ethSlice";
 
-function DeviceDetail() {
-  const id = useParams<{ id: string }>().id;
+type Props = {
+  id?: string;
+};
+
+function DeviceDetail({ id: idFromProps }: Props) {
+  const params = useParams<{ id: string }>();
+  const id = idFromProps || params.id;
   const eth = useEth();
   const [loading, setLoading] = useState(false);
   const history = useHistory();
