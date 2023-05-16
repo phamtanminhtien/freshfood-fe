@@ -83,11 +83,11 @@ export interface FreshFoodInterface extends utils.Interface {
     "checkProductVerified(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getCurrentOwnerOfProduct(uint256)": FunctionFragment;
-    "getLogById(uint256)": FunctionFragment;
+    "getLog(uint256)": FunctionFragment;
     "getOwner()": FunctionFragment;
     "getOwnerByAddress(address)": FunctionFragment;
     "getOwnersOfProduct(uint256)": FunctionFragment;
-    "getProductById(uint256)": FunctionFragment;
+    "getProduct(uint256)": FunctionFragment;
     "getProductByOwner(address)": FunctionFragment;
     "getProducts()": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -120,11 +120,11 @@ export interface FreshFoodInterface extends utils.Interface {
       | "checkProductVerified"
       | "getApproved"
       | "getCurrentOwnerOfProduct"
-      | "getLogById"
+      | "getLog"
       | "getOwner"
       | "getOwnerByAddress"
       | "getOwnersOfProduct"
-      | "getProductById"
+      | "getProduct"
       | "getProductByOwner"
       | "getProducts"
       | "isApprovedForAll"
@@ -182,7 +182,7 @@ export interface FreshFoodInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getLogById",
+    functionFragment: "getLog",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "getOwner", values?: undefined): string;
@@ -195,7 +195,7 @@ export interface FreshFoodInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getProductById",
+    functionFragment: "getProduct",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -303,7 +303,7 @@ export interface FreshFoodInterface extends utils.Interface {
     functionFragment: "getCurrentOwnerOfProduct",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "getLogById", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getLog", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getOwner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getOwnerByAddress",
@@ -313,10 +313,7 @@ export interface FreshFoodInterface extends utils.Interface {
     functionFragment: "getOwnersOfProduct",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getProductById",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "getProduct", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getProductByOwner",
     data: BytesLike
@@ -506,7 +503,7 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[OwnerStructOutput]>;
 
-    getLogById(
+    getLog(
       _productId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[LogStructOutput[]]>;
@@ -523,7 +520,7 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[OwnerStructOutput[]]>;
 
-    getProductById(
+    getProduct(
       _productId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[ProductStructOutput]>;
@@ -679,7 +676,7 @@ export interface FreshFood extends BaseContract {
     overrides?: CallOverrides
   ): Promise<OwnerStructOutput>;
 
-  getLogById(
+  getLog(
     _productId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<LogStructOutput[]>;
@@ -696,7 +693,7 @@ export interface FreshFood extends BaseContract {
     overrides?: CallOverrides
   ): Promise<OwnerStructOutput[]>;
 
-  getProductById(
+  getProduct(
     _productId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<ProductStructOutput>;
@@ -852,7 +849,7 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<OwnerStructOutput>;
 
-    getLogById(
+    getLog(
       _productId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<LogStructOutput[]>;
@@ -869,7 +866,7 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<OwnerStructOutput[]>;
 
-    getProductById(
+    getProduct(
       _productId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<ProductStructOutput>;
@@ -1068,7 +1065,7 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getLogById(
+    getLog(
       _productId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1085,7 +1082,7 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getProductById(
+    getProduct(
       _productId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1235,7 +1232,7 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getLogById(
+    getLog(
       _productId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -1252,7 +1249,7 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getProductById(
+    getProduct(
       _productId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
