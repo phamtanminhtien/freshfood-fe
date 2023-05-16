@@ -1,5 +1,5 @@
 import { Button, Form, Input, InputNumber, notification, Switch } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import {
   Device,
@@ -8,6 +8,19 @@ import {
 } from "../../../services/deviceService";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEth } from "../../../stores/eth/ethSlice";
+import {
+  LayersControl,
+  MapContainer,
+  Marker,
+  Polyline,
+  Popup,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import LocationMarker from "../../../components/LocationMarker";
+import SearchPlace from "../../../components/SearchPlace";
 
 type Props = {
   id?: string;
@@ -22,9 +35,9 @@ function DeviceDetail({ id: idFromProps }: Props) {
   const [device, setDevice] = useState<Partial<Device>>({
     stations: [
       {
-        name: "",
-        longitude: 0,
-        latitude: 0,
+        name: "HCMC University of Technology and Education",
+        longitude: 106.771906,
+        latitude: 10.850613,
       },
     ],
     active: false,
@@ -74,12 +87,41 @@ function DeviceDetail({ id: idFromProps }: Props) {
     }
   };
 
+  const polyline = useMemo(() => {
+    if (device.stations) {
+      return device.stations.map((station) => [
+        station.latitude,
+        station.longitude,
+      ]);
+    }
+    return [];
+  }, [device]);
+
   return (
-    <div className="bg-white w-full rounded-md p-2">
+    <div className="bg-white container mx-auto rounded-md p-2 min-h-[calc(100vh-60px)]">
       <div className="grid grid-cols-12">
-        <div className="col-span-8">
-          <div className="w-full h-full flex justify-center items-center">
-            Map
+        <div className="col-span-8 mr-4">
+          <div className="w-full h-full min-h-[600px]">
+            <SearchPlace setDevice={setDevice}></SearchPlace>
+            <MapContainer
+              style={{ height: "100%", width: "100%" }}
+              center={[51.505, -0.09]}
+              zoom={13}
+              scrollWheelZoom={true}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+
+              <Polyline
+                pathOptions={{
+                  color: "red",
+                }}
+                positions={polyline}
+              />
+              <LocationMarker device={device} setDevice={setDevice} />
+            </MapContainer>
           </div>
         </div>
         <div className="col-span-4">
@@ -125,7 +167,11 @@ function DeviceDetail({ id: idFromProps }: Props) {
                       ...device,
                       stations: [
                         ...(device.stations ? device.stations : []),
-                        { name: "", longitude: 0, latitude: 0 },
+                        {
+                          name: "HCMC University of Technology and Education",
+                          longitude: 106.771906,
+                          latitude: 10.850613,
+                        },
                       ],
                     });
                   }}

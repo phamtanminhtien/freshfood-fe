@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 .ant-btn-primary {
-  background-color: #1677ff !important;
+  background-color: #00b96b !important;
 }
 
 .ant-btn-primary:hover {
-  background-color: #4096ff !important;
+  background-color: #00a15e !important;
 }
 
 .ant-steps

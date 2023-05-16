@@ -33,7 +33,7 @@ function Product() {
   };
 
   return (
-    <div className="w-full grid grid-cols-4 container mx-auto">
+    <div className="w-full grid grid-cols-4 container mx-auto min-h-[calc(100vh-60px)]">
       <CreateModal
         open={showModal}
         onClose={onClose}

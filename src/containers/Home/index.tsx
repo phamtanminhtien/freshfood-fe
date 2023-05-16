@@ -13,7 +13,7 @@ function Home() {
 
       <div className="relative">
         <TopBar />
-        <div className="flex gap-2 items-start relative">
+        <div className="flex gap-2 items-start relative min-h-[calc(100vh-60px)]">
           <Switch>
             <PrivateRoute path={"/v1/dashboard"}>dashboard</PrivateRoute>
             <PrivateRoute exact path={"/v1/product"}>

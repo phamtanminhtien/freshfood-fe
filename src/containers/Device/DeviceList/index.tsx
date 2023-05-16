@@ -39,7 +39,7 @@ function DeviceList() {
   };
 
   return (
-    <div className="grid grid-cols-5 w-full gap-2 container mx-auto">
+    <div className="grid grid-cols-5 w-full gap-2 container mx-auto min-h-[calc(100vh-60px)]">
       <div className="col-span-1 px-2 border-r pt-2 gap-2 flex flex-col">
         <Link
           to="/v1/device/create"
