@@ -118,7 +118,7 @@ function DeviceDetail({ id: idFromProps }: Props) {
                 pathOptions={{
                   color: "red",
                 }}
-                positions={polyline}
+                positions={polyline as any}
               />
               <LocationMarker device={device} setDevice={setDevice} />
             </MapContainer>

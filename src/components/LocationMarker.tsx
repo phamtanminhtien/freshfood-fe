@@ -32,6 +32,7 @@ const LocationMarker = ({ device, setDevice }: Props) => {
   });
 
   useEffect(() => {
+    if (!device?.stations) return;
     const last = device?.stations[device?.stations.length - 1] as Station;
     if (last) {
       map.flyTo([last.latitude, last.longitude], map.getZoom());
