@@ -13,7 +13,7 @@ export function Card(props: Props) {
       onClick={() => props.handleSelect(props.data.productId.toString())}
     >
       <img
-        src="https://cdn.mos.cms.futurecdn.net/sKbruCKdeZpKnNpcwf35fc-1200-80.jpg"
+        src={props.data.url.toString()}
         className="h-32 w-full object-cover rounded-2xl"
       />
       <div className="flex justify-between items-center mt-2">

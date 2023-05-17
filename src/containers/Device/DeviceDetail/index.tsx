@@ -24,9 +24,10 @@ import SearchPlace from "../../../components/SearchPlace";
 
 type Props = {
   id?: string;
+  reload?: () => void;
 };
 
-function DeviceDetail({ id: idFromProps }: Props) {
+function DeviceDetail({ id: idFromProps, reload }: Props) {
   const params = useParams<{ id: string }>();
   const id = idFromProps || params.id;
   const eth = useEth();
@@ -75,6 +76,7 @@ function DeviceDetail({ id: idFromProps }: Props) {
           ownerAddress: eth.account as string,
         });
       }
+      reload && reload();
       setLoading(false);
 
       notification.success({
@@ -101,7 +103,7 @@ function DeviceDetail({ id: idFromProps }: Props) {
     <div className="bg-white container mx-auto rounded-md p-2 min-h-[calc(100vh-60px)]">
       <div className="grid grid-cols-12">
         <div className="col-span-8 mr-4">
-          <div className="w-full h-full min-h-[600px]">
+          <div className="w-full h-full min-h-[600px] relative">
             <SearchPlace setDevice={setDevice}></SearchPlace>
             <MapContainer
               style={{ height: "100%", width: "100%" }}

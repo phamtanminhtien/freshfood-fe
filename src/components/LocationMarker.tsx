@@ -12,7 +12,9 @@ const LocationMarker = ({ device, setDevice }: Props) => {
   const map = useMapEvents({
     click(e) {
       map.locate();
-      map.flyTo(e.latlng, map.getZoom());
+      map.flyTo(e.latlng, 14, {
+        duration: 2,
+      });
       setDevice({
         ...device,
         stations: [
@@ -35,7 +37,9 @@ const LocationMarker = ({ device, setDevice }: Props) => {
     if (!device?.stations) return;
     const last = device?.stations[device?.stations.length - 1] as Station;
     if (last) {
-      map.flyTo([last.latitude, last.longitude], map.getZoom());
+      map.flyTo([last.latitude, last.longitude], 14, {
+        duration: 2,
+      });
     }
   }, [device.stations]);
 

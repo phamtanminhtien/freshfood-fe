@@ -53,6 +53,7 @@ export type ProductStruct = {
   productId: PromiseOrValue<BigNumberish>;
   name: PromiseOrValue<string>;
   origin: PromiseOrValue<string>;
+  url: PromiseOrValue<string>;
   ownerList: OwnerStruct[];
   logList: LogStruct[];
   verified: PromiseOrValue<boolean>;
@@ -62,6 +63,7 @@ export type ProductStructOutput = [
   BigNumber,
   string,
   string,
+  string,
   OwnerStructOutput[],
   LogStructOutput[],
   boolean
@@ -69,6 +71,7 @@ export type ProductStructOutput = [
   productId: BigNumber;
   name: string;
   origin: string;
+  url: string;
   ownerList: OwnerStructOutput[];
   logList: LogStructOutput[];
   verified: boolean;
@@ -77,7 +80,7 @@ export type ProductStructOutput = [
 export interface FreshFoodInterface extends utils.Interface {
   functions: {
     "addLog(uint256,string,string,string)": FunctionFragment;
-    "addProduct(string,string)": FunctionFragment;
+    "addProduct(string,string,string)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "checkProductVerified(uint256)": FunctionFragment;
@@ -159,7 +162,11 @@ export interface FreshFoodInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "addProduct",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "approve",
@@ -474,6 +481,7 @@ export interface FreshFood extends BaseContract {
     addProduct(
       _name: PromiseOrValue<string>,
       _origin: PromiseOrValue<string>,
+      _url: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -556,10 +564,11 @@ export interface FreshFood extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, string, string, boolean] & {
+      [BigNumber, string, string, string, boolean] & {
         productId: BigNumber;
         name: string;
         origin: string;
+        url: string;
         verified: boolean;
       }
     >;
@@ -647,6 +656,7 @@ export interface FreshFood extends BaseContract {
   addProduct(
     _name: PromiseOrValue<string>,
     _origin: PromiseOrValue<string>,
+    _url: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -729,10 +739,11 @@ export interface FreshFood extends BaseContract {
     arg0: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, string, string, boolean] & {
+    [BigNumber, string, string, string, boolean] & {
       productId: BigNumber;
       name: string;
       origin: string;
+      url: string;
       verified: boolean;
     }
   >;
@@ -820,6 +831,7 @@ export interface FreshFood extends BaseContract {
     addProduct(
       _name: PromiseOrValue<string>,
       _origin: PromiseOrValue<string>,
+      _url: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -902,10 +914,11 @@ export interface FreshFood extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, string, string, boolean] & {
+      [BigNumber, string, string, string, boolean] & {
         productId: BigNumber;
         name: string;
         origin: string;
+        url: string;
         verified: boolean;
       }
     >;
@@ -1036,6 +1049,7 @@ export interface FreshFood extends BaseContract {
     addProduct(
       _name: PromiseOrValue<string>,
       _origin: PromiseOrValue<string>,
+      _url: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1203,6 +1217,7 @@ export interface FreshFood extends BaseContract {
     addProduct(
       _name: PromiseOrValue<string>,
       _origin: PromiseOrValue<string>,
+      _url: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

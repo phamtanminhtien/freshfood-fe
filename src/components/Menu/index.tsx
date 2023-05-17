@@ -12,10 +12,10 @@ const menu_items = [
     name: "Product",
     path: "/v1/product",
   },
-  {
-    name: "Log",
-    path: "/v1/log",
-  },
+  // {
+  //   name: "Log",
+  //   path: "/v1/log",
+  // },
   {
     name: "Device",
     path: "/v1/device",

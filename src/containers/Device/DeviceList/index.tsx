@@ -43,7 +43,7 @@ function DeviceList() {
       <div className="col-span-1 px-2 border-r pt-2 gap-2 flex flex-col">
         <Link
           to="/v1/device/create"
-          className="bg-gray-50/40 p-3 rounded-2xl shadow-lg flex justify-center items-center border-4 border-dashed text-white cursor-pointer text-gray-800"
+          className="bg-gray-50/40 p-3 rounded-2xl shadow-lg flex justify-center items-center border-4 border-dashed cursor-pointer text-gray-800"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +72,10 @@ function DeviceList() {
         ))}
       </div>
       <div className="col-span-4">
-        <DeviceDetail id={deviceSelected ? deviceSelected : undefined} />
+        <DeviceDetail
+          id={deviceSelected ? deviceSelected : undefined}
+          reload={getDevices}
+        />
       </div>
     </div>
   );

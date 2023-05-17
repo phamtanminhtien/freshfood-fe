@@ -5,6 +5,7 @@ import { ProductStruct } from "../../types/contracts/FreshFood";
 import { Card } from "./Card";
 import CreateModal from "./CreateModal";
 import ProductDetail from "./ProductDetail";
+import Create from "./Log/Create";
 
 function Product() {
   const [products, setProducts] = React.useState<ProductStruct[]>([]);
@@ -12,12 +13,13 @@ function Product() {
   const [productSelected, setProductSelected] = React.useState<string | null>(
     null
   );
+  const [reload, setReload] = React.useState<number>(1); // [1
   const eth = useEth();
   const getProducts = async () => {
     try {
       const contract = getContract();
       const products = await contract.getProductByOwner(eth.account as string);
-
+      setProductSelected(products[0]?.productId.toString() || null);
       setProducts(products);
     } catch (error) {
       console.log(error);
@@ -70,9 +72,16 @@ function Product() {
         })}
       </div>
       <div className="col-span-2 border-r px-2">
-        <ProductDetail id={productSelected as string} />
+        <ProductDetail id={productSelected as string} reload={reload} />
       </div>
-      <div className="col-span-1 px-2"></div>
+      <div className="col-span-1 px-2">
+        <Create
+          id={productSelected as string}
+          getProduct={() => {
+            setReload(reload + 1);
+          }}
+        />
+      </div>
     </div>
   );
 }

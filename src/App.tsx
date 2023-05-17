@@ -85,6 +85,13 @@ function App() {
           <Home />
         </Route>
 
+        <Route path="/404">
+          <div className="flex flex-col items-center justify-center h-screen text-white">
+            <h1 className="text-9xl font-bold">404</h1>
+            <h2 className="text-3xl font-bold">Page not found</h2>
+          </div>
+        </Route>
+
         <Route path="*">
           <div className="flex flex-col items-center justify-center h-screen text-white">
             <h1 className="text-9xl font-bold">404</h1>

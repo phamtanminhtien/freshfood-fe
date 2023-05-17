@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Device } from "../services/deviceService";
+import { Input, Spin } from "antd";
 
 let timeout: NodeJS.Timeout;
 
@@ -25,6 +26,7 @@ type Props = {
 function SearchPlace({ setDevice }: Props) {
   const [list, setList] = useState<SearchResponse[]>([]);
   const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const getList = async () => {
     const options = {
@@ -41,7 +43,9 @@ function SearchPlace({ setDevice }: Props) {
     };
 
     try {
+      setLoading(true);
       const response = await axios.request(options);
+      setLoading(false);
       setList(response.data.results);
     } catch (error) {
       console.error(error);
@@ -54,23 +58,38 @@ function SearchPlace({ setDevice }: Props) {
       timeout = setTimeout(() => {
         getList();
       }, 1000);
+    } else {
+      setList([]);
     }
   }, [query]);
 
   return (
-    <div className="mb-4 mt-2 relative z-[10000000]">
-      <input
-        className="border focus:outline-none w-full rounded px-2 py-2 text-lg"
-        onChange={(e) => {
-          setQuery(e.target.value);
-        }}
-        value={query}
-      ></input>
+    <div className=" z-[10000000] absolute top-3 right-3 w-[300px]">
+      <div className="relative">
+        <Input
+          allowClear
+          className="border focus:outline-none w-full rounded px-3 py-1 text-base"
+          onChange={(e) => {
+            setQuery(e.target.value);
+          }}
+          value={query}
+          placeholder="Search place"
+        />
+        {loading && (
+          <div
+            className={`z-[1000] absolute top-0 right-0 h-full flex items-center px-2 ${
+              query ? "cursor-pointer" : "cursor-default"
+            }`}
+          >
+            loading
+          </div>
+        )}
+      </div>
       <div className="absolute top-full z-50 bg-white w-full border rounded border-t-0 rounded-t-none">
         {list.map((item) => (
           <div
             key={item.id}
-            className="px-2 py-2 hover:bg-gray-100 cursor-pointer"
+            className="px-2 py-2 hover:bg-gray-100 cursor-pointer overflow-hidden"
             onClick={() => {
               setDevice((device) => ({
                 ...device,
