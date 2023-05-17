@@ -11,8 +11,6 @@ import {
   overrideEthState,
 } from "./stores/eth/ethSlice";
 
-console.log(import.meta.env.VITE_PINATA_JWT);
-
 function App() {
   const dispatch = useDispatch();
   const eth = useEth();
