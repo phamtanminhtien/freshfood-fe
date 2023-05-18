@@ -6,6 +6,7 @@ import { Card } from "./Card";
 import CreateModal from "./CreateModal";
 import ProductDetail from "./ProductDetail";
 import Create from "./Log/Create";
+import LineChart from "../Dashboard/LineChart";
 
 function Product() {
   const [products, setProducts] = React.useState<ProductStruct[]>([]);
@@ -75,6 +76,7 @@ function Product() {
         <ProductDetail id={productSelected as string} reload={reload} />
       </div>
       <div className="col-span-1 px-2">
+        <LineChart productId={productSelected as string} reload={reload} />
         <Create
           id={productSelected as string}
           getProduct={() => {

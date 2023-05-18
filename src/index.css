@@ -31,7 +31,8 @@ body {
 .rdg {
   background-color: #fff !important;
   color: #000;
-  border-width: 1px;
+  border-width: 0.5px;
+
   border-style: solid;
   border-color: #d9d9d9;
   border-radius: 6px;
@@ -40,14 +41,15 @@ body {
   background-color: #fff !important;
   color: #000;
 
-  border-width: 1px;
+  border-width: 0.5px;
   border-style: solid;
   border-color: #d9d9d9;
 }
 .rdg-cell[role="columnheader"] {
   background-color: #fbfbfb !important;
   color: #000;
-  border-width: 1px;
+  border-width: 0.5px;
+
   border-style: solid;
   border-color: #d9d9d9;
 }
@@ -55,8 +57,7 @@ body {
 .rdg-cell input {
   background-color: #fff !important;
   color: #000;
-
-  border-width: 1px;
+  border-width: 0.5px;
   border-style: solid;
   border-color: #d9d9d9;
 }
@@ -87,4 +88,36 @@ body {
   100% {
     opacity: 0;
   }
+}
+
+.table-transparent table,
+.table-transparent .ant-table {
+  color: #fff;
+  background-color: transparent;
+  border: 0.5px solid #e9ecef !important;
+}
+
+.table-transparent th {
+  color: #fff !important;
+  background: transparent !important;
+  border: 0;
+}
+
+.table-transparent td {
+  background: transparent;
+  border: 0;
+}
+
+.table-transparent th,
+.table-transparent td {
+  border-bottom: 1px solid #e9ecef;
+}
+
+.table-transparent tbody + tbody {
+  border-top: 2px solid #e9ecef;
+}
+
+.table-transparent tbody tr:hover td,
+.table-transparent tbody tr:hover th {
+  background-color: rgba(0, 0, 0, 0.075) !important;
 }

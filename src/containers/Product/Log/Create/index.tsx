@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Input, Modal } from "antd";
+import { Button, DatePicker, Form, Input, Modal, message } from "antd";
 import dayjs from "dayjs";
 import React, { useEffect, useMemo, useState } from "react";
 import "react-data-grid/lib/styles.css";
@@ -6,6 +6,7 @@ import DataGrid, { Column, textEditor } from "react-data-grid";
 import { objectStoreService } from "../../../../services/objectStoreService";
 import { getContract, useEth } from "../../../../stores/eth/ethSlice";
 import { ethers } from "ethers";
+import { SENSOR_KEY } from "../../../../constant";
 
 type Props = {
   id: string;
@@ -44,27 +45,32 @@ const columns: readonly Column<Row>[] = [
   },
 ];
 
+const initRows: Row[] = [
+  {
+    stt: 1,
+    name: SENSOR_KEY.TEMPERATURE,
+  },
+  {
+    stt: 2,
+    name: SENSOR_KEY.HUMIDITY,
+  },
+  {
+    stt: 3,
+    name: SENSOR_KEY.LIGHT,
+  },
+  {
+    stt: 4,
+    name: SENSOR_KEY.SOIL_MOISTURE,
+  },
+  {
+    stt: 5,
+  },
+];
+
 function Create(props: Props) {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [rows, setRows] = useState<Row[]>([
-    {
-      stt: 1,
-      name: "temperature",
-    },
-    {
-      stt: 2,
-      name: "tumidity",
-    },
-    {
-      stt: 3,
-      name: "light",
-    },
-    {
-      stt: 4,
-      name: "soilMoisture",
-    },
-  ]);
+  const [rows, setRows] = useState<Row[]>(initRows);
   const eth = useEth();
 
   const onFinish = async (values: any) => {
@@ -83,6 +89,7 @@ function Create(props: Props) {
         dataResult._id,
         dataResult.hash,
         "",
+        dayjs().unix(),
         {
           from: eth?.account as string,
         }
@@ -90,9 +97,13 @@ function Create(props: Props) {
 
       await provider.waitForTransaction(res.hash);
       setLoading(false);
+      form.resetFields();
+      setRows(initRows);
       props.getProduct();
       props.finish && props.finish();
     } catch (error) {
+      setLoading(false);
+      message.error("Create failed, please try again!");
       console.log(error);
     }
   };
@@ -150,7 +161,7 @@ function Create(props: Props) {
           >
             <DatePicker
               format={"HH:mm DD/MM/YYYY"}
-              disabled
+              disabled={import.meta.env.PROD}
               className="w-full"
             />
           </Form.Item>
@@ -173,6 +184,7 @@ function Create(props: Props) {
       </div>
       <div className="">
         <DataGrid
+          className="h-56"
           rowKeyGetter={(row) => row.stt}
           columns={columns}
           rows={rows}
@@ -180,7 +192,7 @@ function Create(props: Props) {
         />
       </div>
 
-      <div className="flex justify-end gap-3">
+      <div className="flex justify-end gap-3 mt-2">
         <Button
           type="default"
           onClick={() => {

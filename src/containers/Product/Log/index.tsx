@@ -70,7 +70,6 @@ function Log({
       console.log(error);
     }
   };
-  console.log(dayjs(objectData?.date));
 
   return (
     <>

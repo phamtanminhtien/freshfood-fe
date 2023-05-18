@@ -18,7 +18,11 @@ export function Card(props: Props) {
       />
       <div className="flex justify-between items-center mt-2">
         <div className="">
-          <div className="text-lg font-bold">{props.data.name.toString()}</div>
+          <div className="flex gap-2">
+            <div className="text-lg font-bold">
+              #{props.data.productId.toString()} {props.data.name.toString()}
+            </div>
+          </div>
           <div className="text-sm text-gray-500">
             {props.data.origin.toString()}
           </div>

@@ -42,14 +42,14 @@ function ProductDetail({ id: idFromProps, reload }: Props) {
     );
 
   return (
-    <div className="rounded bg-white p-2 w-full">
+    <div className="rounded bg-white p-2 w-full container mx-auto">
       <div>
         <img
           src={product?.url.toString()}
           className="h-44 w-full object-cover rounded-2xl"
         />
         <h1 className="text-2xl font-bold text-center pt-2 flex gap-2 justify-center items-center">
-          {product?.name.toString()}
+          #{product?.productId.toString()} {product?.name.toString()}
           {product?.verified && (
             <span className="text-green-600">
               <svg

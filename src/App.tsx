@@ -10,6 +10,7 @@ import {
   getContract,
   overrideEthState,
 } from "./stores/eth/ethSlice";
+import Tracking from "./containers/Tracking";
 
 function App() {
   const dispatch = useDispatch();
@@ -79,6 +80,10 @@ function App() {
       <Switch>
         <Route exact path="/">
           <Login />
+        </Route>
+
+        <Route exact path="/tracking/:id">
+          <Tracking />
         </Route>
 
         <Route path="/v1">
