@@ -81,7 +81,7 @@ export type ProductStructOutput = [
 
 export interface FreshFoodInterface extends utils.Interface {
   functions: {
-    "addLog(uint256,string,string,string,uint256)": FunctionFragment;
+    "addLog(uint256,string,string,string)": FunctionFragment;
     "addProduct(string,string,string)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
@@ -159,8 +159,7 @@ export interface FreshFoodInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>
+      PromiseOrValue<string>
     ]
   ): string;
   encodeFunctionData(
@@ -478,7 +477,6 @@ export interface FreshFood extends BaseContract {
       _obecjectId: PromiseOrValue<string>,
       _hash: PromiseOrValue<string>,
       _location: PromiseOrValue<string>,
-      _timestamp: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -654,7 +652,6 @@ export interface FreshFood extends BaseContract {
     _obecjectId: PromiseOrValue<string>,
     _hash: PromiseOrValue<string>,
     _location: PromiseOrValue<string>,
-    _timestamp: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -830,7 +827,6 @@ export interface FreshFood extends BaseContract {
       _obecjectId: PromiseOrValue<string>,
       _hash: PromiseOrValue<string>,
       _location: PromiseOrValue<string>,
-      _timestamp: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1049,7 +1045,6 @@ export interface FreshFood extends BaseContract {
       _obecjectId: PromiseOrValue<string>,
       _hash: PromiseOrValue<string>,
       _location: PromiseOrValue<string>,
-      _timestamp: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1218,7 +1213,6 @@ export interface FreshFood extends BaseContract {
       _obecjectId: PromiseOrValue<string>,
       _hash: PromiseOrValue<string>,
       _location: PromiseOrValue<string>,
-      _timestamp: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -89,7 +89,6 @@ function Create(props: Props) {
         dataResult._id,
         dataResult.hash,
         "",
-        dayjs().unix(),
         {
           from: eth?.account as string,
         }
