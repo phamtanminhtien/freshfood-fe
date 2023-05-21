@@ -6,12 +6,58 @@ import Device from "../Device";
 import Product from "../Product";
 import ProductDetail from "../Product/ProductDetail";
 import Dashboard from "../Dashboard";
+import { useCallback, useEffect, useState } from "react";
+import { useEth } from "../../stores/eth/ethSlice";
+import { socket } from "../../socket";
+import RequestTransferModal from "../../components/RequestTransferModal/RequestTransferModal";
 
 function Home() {
+  const eth = useEth();
+  const [to, setTo] = useState<string | null>();
+  const [productId, setProductId] = useState<string | null>();
+
+  const connectSocket = useCallback(() => {
+    if (!eth.account) return;
+    socket.connect();
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [eth.account]);
+
+  useEffect(() => {
+    connectSocket();
+  }, [connectSocket]);
+
+  const handleRequestTransfer = useCallback(
+    async (data: { to: string; productId: string }) => {
+      console.log("request transfer", data);
+      setTo(data.to);
+      setProductId(data.productId);
+    },
+    []
+  );
+
+  useEffect(() => {
+    socket.on("request_transfer", handleRequestTransfer);
+    return () => {
+      socket.off("request_transfer", handleRequestTransfer);
+    };
+  }, []);
+
   return (
     <div className="flex">
       <RegisterModal />
-
+      {to && productId && (
+        <RequestTransferModal
+          visible={!!to}
+          to={to}
+          productId={productId}
+          setVisible={() => {
+            setTo(null);
+          }}
+        />
+      )}
       <div className="relative">
         <TopBar />
         <div className="flex gap-2 items-start relative min-h-[calc(100vh-60px)]">

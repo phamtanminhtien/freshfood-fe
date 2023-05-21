@@ -20,6 +20,7 @@ function DeviceList() {
       const res = await deviceService.getByOwnerAddress(eth.account as string);
       // const res = await deviceService.getAll();
       setDevices(res.data);
+      setDeviceSelected(res.data[0]?._id || null);
     } catch (error) {
       console.log(error);
     }

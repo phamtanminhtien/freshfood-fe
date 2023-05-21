@@ -13,7 +13,7 @@ export type LogExtra = LogStruct & {
   object: ObjectData;
 };
 
-type TYPE_PERFORM = "TABLE" | "DRAW_LINE";
+export type TYPE_PERFORM = "TABLE" | "DRAW_LINE";
 
 function Tracking() {
   const params = useParams<{ id: string }>();
@@ -98,7 +98,7 @@ function Tracking() {
   return (
     <div
       style={{
-        backgroundImage: `url(${product?.url.toString()})`,
+        backgroundImage: `url(${product?.image.toString()})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

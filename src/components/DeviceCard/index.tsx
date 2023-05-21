@@ -20,8 +20,8 @@ function DeviceCard({
 }: Props) {
   return (
     <div className="shadow-lg bg-white rounded-lg py-3 flex flex-col gap-5">
-      <div onClick={() => onSelected(id)}>
-        <h2 className="text-base font-bold text-center">{serial}</h2>
+      <div onClick={() => onSelected(id)} className="cursor-pointer">
+        <h2 className="text-base font-bold text-center">#{serial}</h2>
       </div>
       <div className="flex justify-center items-center">
         <div

@@ -5,10 +5,6 @@ import { FreshFood__factory } from "../../types";
 import { EthState, OwnerInfo } from "./eth.type";
 
 const CONTRACT_ADDRESS = import.meta.env.VITE_APP_CONTRACT_ADDRESS;
-console.log(
-  import.meta.env.VITE_APP_CONTRACT_ADDRESS,
-  import.meta.env.VITE_APP_BASE_URL
-);
 export const initialState: { value: EthState } = {
   value: {
     account: null,

@@ -33,6 +33,7 @@ function Dashboard() {
       </div> */}
       {products.map((product) => (
         <Link
+          key={product.productId.toString()}
           className="col-span-1"
           to={`/v1/product/${product.productId.toString()}`}
         >

@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./containers/Home";
@@ -11,6 +11,7 @@ import {
   overrideEthState,
 } from "./stores/eth/ethSlice";
 import Tracking from "./containers/Tracking";
+import { socket } from "./socket";
 
 function App() {
   const dispatch = useDispatch();

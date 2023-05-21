@@ -14,6 +14,8 @@ export type Device = {
   serial: string;
   stations: Station[];
   active: boolean;
+  nextAddress: string;
+  productId?: string;
 };
 
 export const deviceService = {

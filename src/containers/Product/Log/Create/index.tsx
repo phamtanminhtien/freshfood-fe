@@ -6,7 +6,8 @@ import DataGrid, { Column, textEditor } from "react-data-grid";
 import { objectStoreService } from "../../../../services/objectStoreService";
 import { getContract, useEth } from "../../../../stores/eth/ethSlice";
 import { ethers } from "ethers";
-import { SENSOR_KEY } from "../../../../constant";
+import { SENSOR_KEY, SENSOR_NAME } from "../../../../constant";
+import { nameToKey } from "../../../../utils/readable-mapper";
 
 type Props = {
   id: string;
@@ -48,19 +49,19 @@ const columns: readonly Column<Row>[] = [
 const initRows: Row[] = [
   {
     stt: 1,
-    name: SENSOR_KEY.TEMPERATURE,
+    name: SENSOR_NAME.TEMPERATURE,
   },
   {
     stt: 2,
-    name: SENSOR_KEY.HUMIDITY,
+    name: SENSOR_NAME.HUMIDITY,
   },
   {
     stt: 3,
-    name: SENSOR_KEY.LIGHT,
+    name: SENSOR_NAME.LIGHT,
   },
   {
     stt: 4,
-    name: SENSOR_KEY.SOIL_MOISTURE,
+    name: SENSOR_NAME.SOIL_MOISTURE,
   },
   {
     stt: 5,
@@ -81,7 +82,12 @@ function Create(props: Props) {
 
       const data = {
         ...values,
-        table: rows.filter((row) => row.name && row.value),
+        table: rows
+          .filter((row) => row.name && row.value)
+          .map((row) => ({
+            ...row,
+            name: nameToKey(row.name as string),
+          })),
       };
       const dataResult = await (await objectStoreService.post(data)).data;
       const res = await contract.addLog(
@@ -89,6 +95,7 @@ function Create(props: Props) {
         dataResult._id,
         dataResult.hash,
         "",
+        dayjs(values.date).unix(),
         {
           from: eth?.account as string,
         }

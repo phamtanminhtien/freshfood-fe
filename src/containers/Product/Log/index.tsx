@@ -13,6 +13,7 @@ import {
 import { hashObject } from "../../../utils/hash-object";
 import dayjs from "dayjs";
 import { Table } from "antd";
+import { readableMapper } from "../../../utils/readable-mapper";
 
 function Log({
   data,
@@ -51,6 +52,7 @@ function Log({
       title: "Name",
       dataIndex: "name",
       key: "name",
+      render: (text: string) => readableMapper(text),
     },
     {
       title: "Value",
@@ -74,7 +76,7 @@ function Log({
   return (
     <>
       <div className="flex gap-4 p-4 border-[1px] rounded-lg border-gray-300">
-        <div className="">
+        <div className="max-w-[30%]">
           <div className="text-lg font-semibold flex items-center gap-1">
             {`${objectData?.title}`}
 
@@ -129,7 +131,9 @@ function Log({
             </svg>
             {dayjs(objectData?.date).format("HH:mm DD/MM/YYYY")}
           </div>
-          <div className="text-sm text-gray-500">{objectData?.description}</div>
+          <div className="text-sm text-gray-500]">
+            {objectData?.description}
+          </div>
         </div>
         <div className="col-span-4 flex-1">
           <Table

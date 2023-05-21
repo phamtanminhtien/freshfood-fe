@@ -58,7 +58,7 @@ export type ProductStruct = {
   ownerList: OwnerStruct[];
   logList: LogStruct[];
   verified: PromiseOrValue<boolean>;
-  url: PromiseOrValue<string>;
+  image: PromiseOrValue<string>;
 };
 
 export type ProductStructOutput = [
@@ -76,12 +76,12 @@ export type ProductStructOutput = [
   ownerList: OwnerStructOutput[];
   logList: LogStructOutput[];
   verified: boolean;
-  url: string;
+  image: string;
 };
 
 export interface FreshFoodInterface extends utils.Interface {
   functions: {
-    "addLog(uint256,string,string,string)": FunctionFragment;
+    "addLog(uint256,string,string,string,uint256)": FunctionFragment;
     "addProduct(string,string,string)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
@@ -159,7 +159,8 @@ export interface FreshFoodInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
-      PromiseOrValue<string>
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
@@ -477,13 +478,14 @@ export interface FreshFood extends BaseContract {
       _obecjectId: PromiseOrValue<string>,
       _hash: PromiseOrValue<string>,
       _location: PromiseOrValue<string>,
+      _timestamp: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     addProduct(
       _name: PromiseOrValue<string>,
       _origin: PromiseOrValue<string>,
-      _url: PromiseOrValue<string>,
+      _image: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -571,7 +573,7 @@ export interface FreshFood extends BaseContract {
         name: string;
         origin: string;
         verified: boolean;
-        url: string;
+        image: string;
       }
     >;
 
@@ -652,13 +654,14 @@ export interface FreshFood extends BaseContract {
     _obecjectId: PromiseOrValue<string>,
     _hash: PromiseOrValue<string>,
     _location: PromiseOrValue<string>,
+    _timestamp: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   addProduct(
     _name: PromiseOrValue<string>,
     _origin: PromiseOrValue<string>,
-    _url: PromiseOrValue<string>,
+    _image: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -746,7 +749,7 @@ export interface FreshFood extends BaseContract {
       name: string;
       origin: string;
       verified: boolean;
-      url: string;
+      image: string;
     }
   >;
 
@@ -827,13 +830,14 @@ export interface FreshFood extends BaseContract {
       _obecjectId: PromiseOrValue<string>,
       _hash: PromiseOrValue<string>,
       _location: PromiseOrValue<string>,
+      _timestamp: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     addProduct(
       _name: PromiseOrValue<string>,
       _origin: PromiseOrValue<string>,
-      _url: PromiseOrValue<string>,
+      _image: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -921,7 +925,7 @@ export interface FreshFood extends BaseContract {
         name: string;
         origin: string;
         verified: boolean;
-        url: string;
+        image: string;
       }
     >;
 
@@ -1045,13 +1049,14 @@ export interface FreshFood extends BaseContract {
       _obecjectId: PromiseOrValue<string>,
       _hash: PromiseOrValue<string>,
       _location: PromiseOrValue<string>,
+      _timestamp: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     addProduct(
       _name: PromiseOrValue<string>,
       _origin: PromiseOrValue<string>,
-      _url: PromiseOrValue<string>,
+      _image: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1213,13 +1218,14 @@ export interface FreshFood extends BaseContract {
       _obecjectId: PromiseOrValue<string>,
       _hash: PromiseOrValue<string>,
       _location: PromiseOrValue<string>,
+      _timestamp: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     addProduct(
       _name: PromiseOrValue<string>,
       _origin: PromiseOrValue<string>,
-      _url: PromiseOrValue<string>,
+      _image: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

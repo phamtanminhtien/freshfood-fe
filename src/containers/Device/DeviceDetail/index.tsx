@@ -1,5 +1,14 @@
-import { Button, Form, Input, InputNumber, notification, Switch } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  notification,
+  Select,
+  Switch,
+} from "antd";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import {
   Device,
@@ -7,7 +16,7 @@ import {
   Station,
 } from "../../../services/deviceService";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEth } from "../../../stores/eth/ethSlice";
+import { getContract, useEth } from "../../../stores/eth/ethSlice";
 import {
   LayersControl,
   MapContainer,
@@ -21,6 +30,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import LocationMarker from "../../../components/LocationMarker";
 import SearchPlace from "../../../components/SearchPlace";
+import { ProductStruct } from "../../../types/contracts/FreshFood";
 
 type Props = {
   id?: string;
@@ -29,10 +39,27 @@ type Props = {
 
 function DeviceDetail({ id: idFromProps, reload }: Props) {
   const params = useParams<{ id: string }>();
+  const [form] = Form.useForm();
   const id = idFromProps || params.id;
   const eth = useEth();
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const [products, setProducts] = useState<ProductStruct[]>([]);
+
+  const getProducts = useCallback(async () => {
+    try {
+      const contract = getContract();
+      const products = await contract.getProductByOwner(eth.account as string);
+      setProducts(products);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [eth]);
+
+  useEffect(() => {
+    getProducts();
+  }, [getProducts]);
+
   const [device, setDevice] = useState<Partial<Device>>({
     stations: [
       {
@@ -55,6 +82,7 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
     try {
       const res = await deviceService.get(id);
       setDevice(res.data);
+      form.setFieldsValue(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -65,7 +93,9 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
       const value: Partial<Device> = {
         serial: device.serial,
         active: device.active,
+        nextAddress: device.nextAddress,
         stations: device.stations,
+        productId: device.productId,
       };
       setLoading(true);
       if (id) {
@@ -99,6 +129,15 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
     return [];
   }, [device]);
 
+  const disableSubmit = useMemo(() => {
+    return (
+      !device.serial ||
+      !device.stations ||
+      device.stations.length === 0 ||
+      !device.nextAddress
+    );
+  }, [device]);
+
   return (
     <div className="bg-white container mx-auto rounded-md p-2 min-h-[calc(100vh-60px)]">
       <div className="grid grid-cols-12">
@@ -130,31 +169,82 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
           <h2 className="text-lg font-bold text-center py-5">
             {id ? `Update Device` : "Add Device"}
           </h2>
-          <form className="flex flex-col gap-2">
+          <Form form={form} className="flex flex-col" layout="vertical">
             <div className="flex flex-col gap-1">
-              <label htmlFor="serial" className="text-sm">
-                Serial:
-              </label>
-              <Input
-                type="text"
+              <Form.Item
+                label="Serial"
                 name="serial"
-                id="serial"
-                value={device.serial}
-                onChange={(e) =>
-                  setDevice({ ...device, serial: e.target.value })
-                }
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label htmlFor="active" className="text-sm">
-                Active:
-              </label>
-              <div className="">
-                <Switch
-                  checked={device.active}
-                  onChange={(e) => setDevice({ ...device, active: e })}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input serial",
+                  },
+                ]}
+              >
+                <Input
+                  type="text"
+                  name="serial"
+                  id="serial"
+                  value={device.serial}
+                  onChange={(e) =>
+                    setDevice({ ...device, serial: e.target.value })
+                  }
                 />
-              </div>
+              </Form.Item>
+            </div>
+            {/* <div className="flex flex-col gap-1">
+              <Form.Item label="Active" name="active">
+                <div className="">
+                  <Switch
+                    checked={device.active}
+                    onChange={(e) => setDevice({ ...device, active: e })}
+                  />
+                </div>
+              </Form.Item>
+            </div> */}
+            <div className="flex flex-col gap-1">
+              <Form.Item
+                label="Next address at the last station"
+                name="nextAddress"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input next address",
+                  },
+                ]}
+              >
+                <div className="">
+                  <Input
+                    type="text"
+                    name="nextAddress"
+                    id="nextAddress"
+                    value={device.nextAddress}
+                    onChange={(e) =>
+                      setDevice({ ...device, nextAddress: e.target.value })
+                    }
+                  />
+                </div>
+              </Form.Item>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <Form.Item label="Product" name="productId">
+                <div className="">
+                  <Select
+                    allowClear
+                    placeholder="Select product"
+                    showSearch
+                    options={products.map((product) => ({
+                      label: product.name,
+                      value: +product.productId.toString(),
+                    }))}
+                    value={device.productId}
+                    onChange={(productId) =>
+                      setDevice({ ...device, productId })
+                    }
+                  />
+                </div>
+              </Form.Item>
             </div>
             <div className="flex flex-col gap-1">
               <div className="flex justify-between">
@@ -252,6 +342,13 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => {
+                        if (
+                          !device.stations?.length ||
+                          device.stations?.length === 1
+                        ) {
+                          message.error("You must have at least one station");
+                          return;
+                        }
                         setDevice({
                           ...device,
                           stations: device.stations?.filter(
@@ -281,7 +378,7 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
                 <div className="flex justify-end">
                   <Button
                     loading={loading}
-                    disabled={loading}
+                    disabled={loading || disableSubmit}
                     onClick={onSubmit}
                     type="primary"
                   >
@@ -290,7 +387,7 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
                 </div>
               </div>
             </div>
-          </form>
+          </Form>
         </div>
       </div>
     </div>

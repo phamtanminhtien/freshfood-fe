@@ -121,3 +121,11 @@ body {
 .table-transparent tbody tr:hover th {
   background-color: rgba(0, 0, 0, 0.075) !important;
 }
+
+.ant-switch:not(.ant-switch-disabled, .ant-switch-checked) {
+  background: rgba(0, 0, 0, 0.45) !important;
+}
+
+.ant-form-item {
+  margin-bottom: 10px !important;
+}

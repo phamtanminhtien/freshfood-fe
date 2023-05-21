@@ -19,6 +19,7 @@ import {
   SENSOR_BORDER_COLOR,
   SENSOR_KEY,
 } from "../../../constant";
+import { readableMapper } from "../../../utils/readable-mapper";
 
 ChartJS.register(
   CategoryScale,
@@ -74,7 +75,7 @@ function LineChart({ productId, reload, className }: Props) {
       const labels = res.map((item) => dayjs(item?.date).format("DD/MM/YYYY"));
       setLabels(labels);
       const _datasets = Object.keys(SENSOR_KEY).map((key) => ({
-        label: key,
+        label: readableMapper(SENSOR_KEY[key as keyof typeof SENSOR_KEY]),
         data: res.map((item) => {
           const sensor = item?.table.find(
             (i) => i.name === SENSOR_KEY[key as keyof typeof SENSOR_KEY]
