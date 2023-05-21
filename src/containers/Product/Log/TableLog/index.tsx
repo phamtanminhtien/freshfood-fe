@@ -86,6 +86,7 @@ function TableLog({ data }: Props) {
       render: (_: any, record: LogStruct & { object: ObjectData }) => {
         console.log(record);
         if (record.objectId === "create") return "Create product";
+        if (record.objectId === "transfer") return "Transfer product";
         if (!record.object) return "";
         return record.object.title;
       },
@@ -97,6 +98,7 @@ function TableLog({ data }: Props) {
       ellipsis: true,
       render: (_: any, record: LogStruct & { object: ObjectData }) => {
         if (record.objectId === "create") return "Successfully";
+        if (record.objectId === "transfer") return "Successfully";
         if (!record.object) return "";
         return (
           <Tooltip placement="topLeft" title={record.object.description}>
@@ -110,6 +112,7 @@ function TableLog({ data }: Props) {
       width: 50,
       render: (_: any, record: LogStruct & { object: ObjectData }) => {
         if (record.objectId === "create") return "0";
+        if (record.objectId === "transfer") return "0";
         if (!record.object) return "";
         return (
           <Popover

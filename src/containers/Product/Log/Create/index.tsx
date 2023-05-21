@@ -13,6 +13,7 @@ type Props = {
   id: string;
   getProduct: () => void;
   finish?: () => void;
+  disabled?: boolean;
 };
 
 type Row = {
@@ -213,7 +214,7 @@ function Create(props: Props) {
             type="primary"
             htmlType="submit"
             loading={loading}
-            disabled={loading}
+            disabled={loading || props.disabled}
           >
             Create
           </Button>

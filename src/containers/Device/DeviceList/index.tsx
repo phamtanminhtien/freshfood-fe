@@ -40,8 +40,8 @@ function DeviceList() {
   };
 
   return (
-    <div className="grid grid-cols-5 w-full gap-2 container mx-auto min-h-[calc(100vh-60px)]">
-      <div className="col-span-1 px-2 border-r pt-2 gap-2 flex flex-col">
+    <div className="grid grid-cols-5 w-full gap-2 container mx-auto h-[calc(100vh-60px)] overflow-hidden">
+      <div className="col-span-1 px-2 border-r pt-2 gap-2 flex flex-col h-[calc(100vh-60px)] overflow-auto">
         <Link
           to="/v1/device/create"
           className="bg-gray-50/40 p-3 rounded-2xl shadow-lg flex justify-center items-center border-4 border-dashed cursor-pointer text-gray-800"

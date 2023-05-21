@@ -1,4 +1,4 @@
-import React, { StyleHTMLAttributes, useEffect } from "react";
+import { StyleHTMLAttributes, useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -46,10 +46,11 @@ type Dataset = {
 
 function LineChart({ productId, reload, className }: Props) {
   if (!productId) return null;
-  const [product, setProduct] = React.useState<ProductStruct | null>();
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [datasets, setDatasets] = React.useState<Dataset[]>([]);
-  const [labels, setLabels] = React.useState<string[]>([]);
+  const [product, setProduct] = useState<ProductStruct | null>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [datasets, setDatasets] = useState<Dataset[]>([]);
+  const [labels, setLabels] = useState<string[]>([]);
+  const [fullScreen, setFullScreen] = useState<boolean>(false);
 
   const eth = useEth();
 
@@ -61,7 +62,7 @@ function LineChart({ productId, reload, className }: Props) {
 
   useEffect(() => {
     getLogs();
-  }, [product?.logList]);
+  }, [product?.logList, fullScreen]);
 
   const getLogs = async () => {
     if (product?.logList) {
@@ -72,7 +73,9 @@ function LineChart({ productId, reload, className }: Props) {
         arr.push(getLog(product.logList[i].objectId.toString()));
       }
       const res = await Promise.all(arr);
-      const labels = res.map((item) => dayjs(item?.date).format("DD/MM/YYYY"));
+      const labels = product.logList.map((item) =>
+        dayjs.unix(+item.timestamp.toString()).format("DD/MM/YYYY")
+      );
       setLabels(labels);
       const _datasets = Object.keys(SENSOR_KEY).map((key) => ({
         label: readableMapper(SENSOR_KEY[key as keyof typeof SENSOR_KEY]),
@@ -82,6 +85,7 @@ function LineChart({ productId, reload, className }: Props) {
           );
           return parseInt(sensor?.value || "0");
         }),
+        borderWidth: fullScreen ? 3 : 1,
         borderColor: SENSOR_BORDER_COLOR[key as keyof typeof SENSOR_KEY] || "",
         backgroundColor:
           SENSOR_BACKGROUND_COLOR[key as keyof typeof SENSOR_KEY] || "",
@@ -119,7 +123,9 @@ function LineChart({ productId, reload, className }: Props) {
       },
       title: {
         display: true,
-        text: product?.name.toString(),
+        text: `${product?.name.toString() || "Loading"} - #${
+          product?.productId.toString() || "Loading"
+        }`,
       },
     },
   };
@@ -129,7 +135,61 @@ function LineChart({ productId, reload, className }: Props) {
     datasets,
   };
 
-  return <Line className={className} options={options} data={data} />;
+  return (
+    <div
+      className={`group ${
+        fullScreen
+          ? "w-screen h-screen fixed top-0 left-0 right-0 bottom-0 z-50 bg-white p-10"
+          : "relative"
+      }`}
+    >
+      <div
+        className={`text-gray-600 absolute opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer z-50 hover:scale-110 ${
+          fullScreen ? "right-5 top-5" : "right-0 top-0"
+        }`}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setFullScreen(!fullScreen);
+        }}
+      >
+        {fullScreen ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-10 h-10"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM13.5 10.5h-6"
+            />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className={"w-5 h-5"}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"
+            />
+          </svg>
+        )}
+      </div>
+      <div className="relative w-full h-full">
+        <Line className={className} options={options} data={data} />
+      </div>
+    </div>
+  );
 }
 
 export default LineChart;

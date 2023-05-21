@@ -65,6 +65,7 @@ function Log({
   }, [id]);
   const getLog = async () => {
     try {
+      if (["create", "transfer"].includes(data.objectId.toString())) return;
       const res = await objectStoreService.get(data.objectId.toString());
       setObjectData(res.data);
       setVerify(data.hash === hashObject(res.data));
@@ -72,6 +73,8 @@ function Log({
       console.log(error);
     }
   };
+
+  if (data.objectId.toString() === "transfer") return null;
 
   return (
     <>
