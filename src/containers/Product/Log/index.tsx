@@ -84,7 +84,7 @@ function Log({
             {`${objectData?.title}`}
 
             {verify === null && <span className="text-sm"> Loading...</span>}
-            {verify === true && (
+            {verify ? (
               <span className="text-green-600 text-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -99,8 +99,7 @@ function Log({
                   />
                 </svg>
               </span>
-            )}
-            {verify === false && (
+            ) : (
               <span className="text-red-800 text-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

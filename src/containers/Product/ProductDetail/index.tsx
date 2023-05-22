@@ -144,7 +144,6 @@ function ProductDetail({
           else {
             const contract = getContract();
             const tx = await contract.transferProduct(id, addressTo);
-            console.log(id, addressTo);
 
             await tx.wait();
             getProducts && getProducts();
