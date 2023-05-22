@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@amcharts/amcharts4": "^4.10.36",
     "@ant-design/icons": "^5.0.1",
     "@reduxjs/toolkit": "^1.9.3",
     "antd": "^5.3.2",

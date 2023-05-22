@@ -85,6 +85,7 @@ function Tracking() {
   const getPerform = () => {
     const props = {
       logs,
+      image: product?.image.toString(),
     };
 
     switch (typePerform) {
