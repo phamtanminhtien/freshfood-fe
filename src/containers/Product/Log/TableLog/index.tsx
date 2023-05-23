@@ -95,6 +95,8 @@ function TableLog({ data }: Props) {
       render: (_: any, record: LogData) => {
         if (record.objectId === "create") return "Create product";
         if (record.objectId === "transfer") return "Transfer product";
+        if (record.objectId === "delivery")
+          return <span>Location Updated</span>;
         if (!record.object) return "";
         return (
           <span className="flex gap-1">
@@ -142,6 +144,7 @@ function TableLog({ data }: Props) {
       render: (_: any, record: LogData) => {
         if (record.objectId === "create") return "Successfully";
         if (record.objectId === "transfer") return "Successfully";
+        if (record.objectId === "delivery") return "Successfully";
         if (!record.object) return "";
         return (
           <Tooltip placement="topLeft" title={record.object.description}>
@@ -156,13 +159,43 @@ function TableLog({ data }: Props) {
       render: (_: any, record: LogData) => {
         if (record.objectId === "create") return "0";
         if (record.objectId === "transfer") return "0";
+
+        if (record.objectId === "delivery") {
+          const [longitude, latitude] = record.location.toString().split(",");
+          return (
+            <Popover
+              placement="right"
+              content={
+                <div className="flex flex-col">
+                  <div className="flex justify-between gap-2">
+                    <span>Longitude:</span>
+                    <span>{longitude}</span>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <span>Latitude:</span>
+                    <span>{latitude}</span>
+                  </div>
+                </div>
+              }
+            >
+              <a
+                href={`https://www.google.com/maps/@${longitude},${latitude},19z`}
+                target="_blank"
+                className="cursor-pointer"
+              >
+                2
+              </a>
+            </Popover>
+          );
+        }
+
         if (!record.object) return "";
         return (
           <Popover
             placement="right"
             content={
               <div className="flex flex-col">
-                {record.object.table.map((item) => (
+                {record.object?.table.map((item) => (
                   <div className="flex justify-between gap-2">
                     <span>{readableMapper(item.name)}:</span>
                     <span>{item.value}</span>

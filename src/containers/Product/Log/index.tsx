@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LogStruct } from "../../../types/contracts/FreshFood";
+import { LogStruct, ProductStruct } from "../../../types/contracts/FreshFood";
 import Lottie, { useLottie } from "lottie-react";
 import axios from "axios";
 import LogWithLottie from "./LogWithLottie";
@@ -14,6 +14,7 @@ import { hashObject } from "../../../utils/hash-object";
 import dayjs from "dayjs";
 import { Table } from "antd";
 import { readableMapper } from "../../../utils/readable-mapper";
+import LogDelivery from "./LogDelivery";
 
 function Log({
   data,
@@ -39,6 +40,14 @@ function Log({
     return (
       <>
         <LogWithLottie url="https://assets7.lottiefiles.com/packages/lf20_ksulo5gx.json" />
+        {showCreate && <LogCreate getProduct={getProduct} id={id} />}
+      </>
+    );
+
+  if (data.hash.toString() === "delivery")
+    return (
+      <>
+        <LogDelivery id={id} data={data} />
         {showCreate && <LogCreate getProduct={getProduct} id={id} />}
       </>
     );
