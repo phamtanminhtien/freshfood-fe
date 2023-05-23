@@ -75,8 +75,8 @@ function Tracking() {
       }
 
       const logs = await Promise.all(arr);
-      console.log(logs);
-      const logsWithExtra = logs.map((log, index) => {
+
+      const logsWithExtra = logs.map((log: any, index) => {
         if (["create", "delivery", "transfer"].includes(log?.title as string))
           return {
             ...product?.logList[index],

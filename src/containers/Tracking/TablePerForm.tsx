@@ -192,14 +192,14 @@ function TablePerForm({ logs }: Props) {
     )
       ? {
           stt: index + 1,
-          title: log.objectId,
+          title: log.objectId.toString(),
           time: +log.timestamp.toString(),
           temperature: "",
           humidity: "",
           light: "",
           soilMoisture: "",
           safe: true,
-          location: log.location,
+          location: log.location.toString(),
         }
       : {
           stt: index + 1,
@@ -215,7 +215,7 @@ function TablePerForm({ logs }: Props) {
             (item) => item.name === "soilMoisture"
           )?.value,
           safe: hashObject(log.object) === log.hash,
-          location: log.location,
+          location: log.location.toString(),
         }
   );
 
