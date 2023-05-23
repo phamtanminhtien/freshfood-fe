@@ -67,15 +67,23 @@ function LineChart({ productId, reload, className }: Props) {
   const getLogs = async () => {
     if (product?.logList) {
       const arr = [];
+      const labels = [];
       for (let i = 0; i < product.logList.length; i++) {
-        if (["create"].includes(product.logList[i].objectId.toString()))
+        if (
+          ["create", "delivery", "transfer"].includes(
+            product.logList[i].objectId.toString()
+          )
+        )
           continue;
         arr.push(getLog(product.logList[i].objectId.toString()));
+        labels.push(
+          dayjs
+            .unix(+product.logList[i].timestamp.toString())
+            .format("DD/MM/YYYY")
+        );
       }
       const res = await Promise.all(arr);
-      const labels = product.logList.map((item) =>
-        dayjs.unix(+item.timestamp.toString()).format("DD/MM/YYYY")
-      );
+
       setLabels(labels);
       const _datasets = Object.keys(SENSOR_KEY).map((key) => ({
         label: readableMapper(SENSOR_KEY[key as keyof typeof SENSOR_KEY]),
@@ -90,6 +98,7 @@ function LineChart({ productId, reload, className }: Props) {
         backgroundColor:
           SENSOR_BACKGROUND_COLOR[key as keyof typeof SENSOR_KEY] || "",
       }));
+      console.log(_datasets);
       setDatasets(_datasets);
     }
   };

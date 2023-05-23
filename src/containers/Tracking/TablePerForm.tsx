@@ -19,6 +19,7 @@ type LogData = {
   light: string | undefined;
   soilMoisture: string | undefined;
   safe: boolean;
+  location: string;
 };
 
 const columns: ColumnsType<LogData> = [
@@ -26,14 +27,18 @@ const columns: ColumnsType<LogData> = [
     title: "STT",
     dataIndex: "stt",
     key: "stt",
+    width: 90,
+    align: "center",
   },
   {
     title: "Title",
     dataIndex: "title",
     key: "title",
+    width: 200,
     render: (title: string) => {
       if (title === "create") return <span>Create product</span>;
       if (title === "transfer") return <span>Transfer product</span>;
+      if (title === "delivery") return <span>Location Updated</span>;
       return <>{title}</>;
     },
   },
@@ -42,11 +47,13 @@ const columns: ColumnsType<LogData> = [
     dataIndex: "time",
     key: "time",
     render: (time: number) => dayjs.unix(time).format("DD/MM/YYYY HH:mm"),
+    width: 200,
   },
   {
     title: SENSOR_NAME["TEMPERATURE"],
     dataIndex: "temperature",
     key: "temperature",
+    width: 150,
   },
   {
     title: SENSOR_NAME["HUMIDITY"],
@@ -62,16 +69,89 @@ const columns: ColumnsType<LogData> = [
     title: SENSOR_NAME["SOIL_MOISTURE"],
     dataIndex: "soilMoisture",
     key: "soilMoisture",
+    width: 150,
+  },
+  {
+    title: "Latitude",
+    dataIndex: "location",
+    key: "location",
+    render: (location: string, record: LogData) => {
+      if (record.title !== "delivery") return <></>;
+      const [latitude, longitude] = location?.split(",");
+      return (
+        <a
+          className="flex items-center gap-2 cursor-pointer"
+          href={`https://www.google.com/maps/@${latitude},${longitude},19z`}
+          target="_blank"
+        >
+          {latitude}
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
+              />
+            </svg>
+          </span>
+        </a>
+      );
+    },
+  },
+  {
+    title: "Longitude",
+    dataIndex: "location",
+    key: "location",
+    render: (location: string, record: LogData) => {
+      if (record.title !== "delivery") return <></>;
+      const [latitude, longitude] = location?.split(",");
+      return (
+        <a
+          className="flex items-center gap-2 cursor-pointer"
+          href={`https://www.google.com/maps/@${latitude},${longitude},19z`}
+          target="_blank"
+        >
+          {longitude}
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
+              />
+            </svg>
+          </span>
+        </a>
+      );
+    },
   },
   {
     title: "Safe",
     dataIndex: "safe",
     key: "safe",
+    width: 90,
+    align: "center",
     render: (safe: boolean, record: LogData) => {
-      console.log(record);
       if (["create", "transfer"].includes(record.title as string)) return <></>;
       return (
-        <span style={{ color: safe ? "#10B981" : "#EF4444" }}>
+        <span
+          style={{ color: safe ? "#10B981" : "#EF4444" }}
+          className="justify-center flex"
+        >
           {safe ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +187,9 @@ const columns: ColumnsType<LogData> = [
 
 function TablePerForm({ logs }: Props) {
   const data: LogData[] = logs.map((log, index) =>
-    log.objectId === "create"
+    ["create", "delivery", "transfer"].includes(
+      log.objectId.toString() as string
+    )
       ? {
           stt: index + 1,
           title: log.objectId,
@@ -116,7 +198,8 @@ function TablePerForm({ logs }: Props) {
           humidity: "",
           light: "",
           soilMoisture: "",
-          safe: hashObject(log.object) === log.hash,
+          safe: true,
+          location: log.location,
         }
       : {
           stt: index + 1,
@@ -132,6 +215,7 @@ function TablePerForm({ logs }: Props) {
             (item) => item.name === "soilMoisture"
           )?.value,
           safe: hashObject(log.object) === log.hash,
+          location: log.location,
         }
   );
 
@@ -140,7 +224,10 @@ function TablePerForm({ logs }: Props) {
       <Table<LogData>
         style={{
           backgroundColor: "transparent",
-          width: "1000px",
+          width: "1400px",
+        }}
+        scroll={{
+          y: "calc(100vh - 300px)",
         }}
         rowClassName={(record, index) => {
           if (["create", "transfer"].includes(record.title))

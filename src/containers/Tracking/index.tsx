@@ -55,18 +55,29 @@ function Tracking() {
     try {
       const arr = [];
       if (!product?.logList) return;
-      for (let i = 0; i < product?.logList.length; i++) {
-        if (["create"].includes(product?.logList[i].objectId.toString())) {
-          arr.push({
-            title: "create",
-          });
+
+      for (let i = 0; i < product.logList.length; i++) {
+        if (
+          ["create", "delivery", "transfer"].includes(
+            product.logList[i].objectId.toString()
+          )
+        ) {
+          const virtualLog: LogStruct = {
+            hash: "",
+            objectId: product.logList[i].objectId,
+            timestamp: product.logList[i].timestamp,
+            location: "",
+          };
+          arr.push(virtualLog);
           continue;
         }
-        arr.push(getLog(product?.logList[i].objectId.toString()));
+        arr.push(getLog(product.logList[i].objectId.toString()));
       }
+
       const logs = await Promise.all(arr);
+      console.log(logs);
       const logsWithExtra = logs.map((log, index) => {
-        if (log?.title == "create")
+        if (["create", "delivery", "transfer"].includes(log?.title as string))
           return {
             ...product?.logList[index],
             object: null as any,
@@ -76,6 +87,7 @@ function Tracking() {
           object: log as ObjectData,
         };
       });
+      console.log(logsWithExtra);
       setLogs(logsWithExtra);
     } catch (error) {
       console.log(error);
