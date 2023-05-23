@@ -172,7 +172,7 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
           <Form form={form} className="flex flex-col" layout="vertical">
             <div className="flex flex-col gap-1">
               <Form.Item
-                label="Serial"
+                label="Address"
                 name="serial"
                 rules={[
                   {
