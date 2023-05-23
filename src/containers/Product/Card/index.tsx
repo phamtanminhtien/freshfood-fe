@@ -43,9 +43,9 @@ export function Card(props: Props) {
             {props.data.origin.toString()}
           </div>
         </div>
-        <div className="bg-gray-200 text-green-600 rounded-full px-2 py-1 text-sm">
+        {/* <div className="bg-gray-200 text-green-600 rounded-full px-2 py-1 text-sm">
           30 ngày
-        </div>
+        </div> */}
       </div>
     </div>
   );
