@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { LogExtra } from ".";
 import { Table } from "antd";
 import { SENSOR_NAME } from "../../constant";
 import dayjs from "dayjs";
 import { hashObject } from "../../utils/hash-object";
 import { ColumnsType } from "antd/es/table";
+import { Circle, MapContainer, Polyline, TileLayer } from "react-leaflet";
+import LocationMarker from "../../components/LocationMarker";
 
 type Props = {
   logs: LogExtra[];
@@ -47,7 +49,7 @@ const columns: ColumnsType<LogData> = [
     dataIndex: "time",
     key: "time",
     render: (time: number) => dayjs.unix(time).format("DD/MM/YYYY HH:mm"),
-    width: 200,
+    width: 160,
   },
   {
     title: SENSOR_NAME["TEMPERATURE"],
@@ -84,7 +86,7 @@ const columns: ColumnsType<LogData> = [
           href={`https://www.google.com/maps/@${latitude},${longitude},19z`}
           target="_blank"
         >
-          {latitude}
+          {latitude.slice(0, 7)}
           <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +120,7 @@ const columns: ColumnsType<LogData> = [
           href={`https://www.google.com/maps/@${latitude},${longitude},19z`}
           target="_blank"
         >
-          {longitude}
+          {longitude.slice(0, 7)}
           <span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -186,6 +188,8 @@ const columns: ColumnsType<LogData> = [
 ];
 
 function TablePerForm({ logs }: Props) {
+  const [isShowMap, setIsShowMap] = useState(false);
+
   const data: LogData[] = logs.map((log, index) =>
     ["create", "delivery", "transfer"].includes(
       log.objectId.toString() as string
@@ -219,25 +223,80 @@ function TablePerForm({ logs }: Props) {
         }
   );
 
+  const polyline = useMemo(() => {
+    return logs
+      .filter((i) => i.objectId === "delivery")
+      .map((i) => {
+        return i.location.toString().split(",");
+      });
+  }, [logs]);
+
   return (
-    <div className="table-transparent">
-      <Table<LogData>
-        style={{
-          backgroundColor: "transparent",
-          width: "1400px",
-        }}
-        scroll={{
-          y: "calc(100vh - 300px)",
-        }}
-        rowClassName={(record, index) => {
-          if (["create", "transfer"].includes(record.title))
-            return "font-semibold bg-green-100 bg-opacity-20";
-          return "";
-        }}
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-      ></Table>
+    <div className="table-transparent flex w-screen px-4 gap-2">
+      <div className="mx-auto">
+        <Table<LogData>
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                if (record.title === "delivery") {
+                  setIsShowMap(!isShowMap);
+                }
+              },
+            };
+          }}
+          style={{
+            backgroundColor: "transparent",
+            width: isShowMap ? "calc(100vw - 500px)" : "90vw",
+            transition: "all .5s",
+          }}
+          scroll={{
+            y: "calc(100vh - 300px)",
+            x: "300px",
+          }}
+          rowClassName={(record, index) => {
+            if (["create", "transfer"].includes(record.title))
+              return "font-semibold bg-green-100 bg-opacity-20";
+            return "";
+          }}
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+        ></Table>
+      </div>
+      {isShowMap && (
+        <div className="w-[500px] rounded overflow-hidden">
+          <MapContainer
+            style={{ height: "100%", width: "100%" }}
+            center={[51.505, -0.09]}
+            zoom={13}
+            scrollWheelZoom={true}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+
+            <Polyline
+              pathOptions={{
+                color: "red",
+              }}
+              positions={polyline as any}
+            />
+            {/* 
+            {polyline.map((i) => (
+              <Circle
+                center={{
+                  lat: +i[0],
+                  lng: +i[1],
+                }}
+                radius={10}
+                color="#9a111139"
+              />
+            ))} */}
+            <LocationMarker locations={polyline as any} />
+          </MapContainer>
+        </div>
+      )}
     </div>
   );
 }

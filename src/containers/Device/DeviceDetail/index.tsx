@@ -28,9 +28,9 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import LocationMarker from "../../../components/LocationMarker";
 import SearchPlace from "../../../components/SearchPlace";
 import { ProductStruct } from "../../../types/contracts/FreshFood";
+import LocationMarker from "../LocationMarker";
 
 type Props = {
   id?: string;

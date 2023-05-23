@@ -2,62 +2,60 @@ import { useEffect, useMemo, useState } from "react";
 import { Marker, useMapEvents } from "react-leaflet";
 import { Device, Station } from "../services/deviceService";
 import MarkerCustom from "./MarkerCustom";
+import { LogStruct } from "../types/contracts/FreshFood";
+import L from "leaflet";
 
 type Props = {
-  device: Partial<Device>;
-  setDevice: (device: Partial<Device>) => void;
+  locations: [number, number][];
 };
 
-const LocationMarker = ({ device, setDevice }: Props) => {
+const LocationMarker = ({ locations }: Props) => {
   const map = useMapEvents({
-    click(e) {
-      map.locate();
-      map.flyTo(e.latlng, 14, {
-        duration: 2,
-      });
-      setDevice({
-        ...device,
-        stations: [
-          ...(device.stations as Station[]),
-          {
-            name: "",
-            longitude: e.latlng.lng,
-            latitude: e.latlng.lat,
-          },
-        ],
-      });
-    },
-
+    // click(e) {
+    //   map.locate();
+    //   map.flyTo(e.latlng, 14, {
+    //     duration: 2,
+    //   });
+    // },
     // locationfound(e) {
     //   map.flyTo(e.latlng, map.getZoom());
     // },
   });
 
   useEffect(() => {
-    if (!device?.stations) return;
-    const last = device?.stations[device?.stations.length - 1] as Station;
-    if (last) {
-      map.flyTo([last.latitude, last.longitude], 14, {
-        duration: 2,
-      });
-    }
-  }, [device.stations]);
+    // if (!device?.stations) return;
+    // const last = device?.stations[device?.stations.length - 1] as Station;
+    // if (last) {
+    //   map.flyTo([last.latitude, last.longitude], 14, {
+    //     duration: 2,
+    //   });
+    // }
+    if (locations.length === 0) return;
+    const polygon = new L.Polygon(locations).addTo(map);
+
+    // Get bounds object
+    const bounds = polygon.getBounds();
+    console.log(bounds);
+    // Fit the map to the polygon bounds
+    map.fitBounds(bounds);
+
+    // Or center on the polygon
+    const center = bounds.getCenter();
+    map.panTo(center);
+  }, [locations, map]);
 
   return (
     <>
-      {device.stations &&
-        device.stations.map((station, index) => {
+      {locations &&
+        locations.map((locations, index) => {
+          const [latitude, longitude] = locations;
+
           return (
             <MarkerCustom
               key={index}
-              station={station}
-              setStation={(station) => {
-                const stations = device.stations as Station[];
-                stations[index] = station as Station;
-                setDevice({
-                  ...device,
-                  stations,
-                });
+              log={{
+                latitude: +latitude,
+                longitude: +longitude,
               }}
             ></MarkerCustom>
           );

@@ -14,27 +14,15 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 type Props = {
-  station: {
+  log: {
     latitude: number;
     longitude: number;
   };
-  setStation: (station: { latitude: number; longitude: number }) => void;
 };
 
-function MarkerCustom({ station, setStation }: Props) {
+function MarkerCustom({ log }: Props) {
   return (
-    <Marker
-      draggable={true}
-      position={[station.latitude, station.longitude]}
-      eventHandlers={{
-        dragend: (e) => {
-          setStation({
-            latitude: e.target.getLatLng().lat,
-            longitude: e.target.getLatLng().lng,
-          });
-        },
-      }}
-    ></Marker>
+    <Marker draggable={true} position={[log.latitude, log.longitude]}></Marker>
   );
 }
 
