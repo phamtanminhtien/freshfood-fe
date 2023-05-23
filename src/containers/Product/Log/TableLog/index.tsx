@@ -37,9 +37,13 @@ function TableLog({ data }: Props) {
       const arr = [];
       if (!data) return;
       for (let i = 0; i < data.length; i++) {
-        if (["create"].includes(data[i].objectId.toString())) {
+        if (
+          ["create", "transfer", "delivery"].includes(
+            data[i].objectId.toString()
+          )
+        ) {
           arr.push({
-            title: "create",
+            title: data[i].objectId.toString(),
           });
           continue;
         }
@@ -47,7 +51,7 @@ function TableLog({ data }: Props) {
       }
       const logs = await Promise.all(arr);
       const logsWithExtra = logs.map((log, index) => {
-        if (log?.title == "create")
+        if (["create", "transfer", "delivery"].includes(log?.title as string))
           return {
             ...data[index],
             object: null as any,
