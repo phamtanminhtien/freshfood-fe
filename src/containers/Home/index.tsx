@@ -6,6 +6,7 @@ import Device from "../Device";
 import Product from "../Product";
 import ProductDetail from "../Product/ProductDetail";
 import Dashboard from "../Dashboard";
+import Welcome from "../Welcome";
 import { useCallback, useEffect, useState } from "react";
 import { useEth } from "../../stores/eth/ethSlice";
 import { socket } from "../../socket";
@@ -60,24 +61,28 @@ function Home() {
       )}
       <div className="relative">
         <TopBar />
-        <div className="flex gap-2 items-start relative min-h-[calc(100vh-60px)]">
-          <Switch>
-            <PrivateRoute path={"/v1/home"}>
-              <Dashboard />
-            </PrivateRoute>
-            <PrivateRoute exact path={"/v1/product"}>
-              <Product />
-            </PrivateRoute>
+        {/* <div className="flex gap-2 items-start relative min-h-[calc(100vh-60px)]"> */}
+        <Switch>
+          <PrivateRoute path={"/v1/home"}>
+            <Welcome />
+          </PrivateRoute>
+          <PrivateRoute exact path={"/v1/product"}>
+            <Product />
+          </PrivateRoute>
 
-            <PrivateRoute path={"/v1/product/:id"}>
-              <ProductDetail />
-            </PrivateRoute>
+          <PrivateRoute path={"/v1/product/:id"}>
+            <ProductDetail />
+          </PrivateRoute>
 
-            <PrivateRoute path={"/v1/device"}>
-              <Device />
-            </PrivateRoute>
-          </Switch>
-        </div>
+          <PrivateRoute path={"/v1/dashboard"}>
+            <Dashboard />
+          </PrivateRoute>
+
+          <PrivateRoute path={"/v1/device"}>
+            <Device />
+          </PrivateRoute>
+        </Switch>
+        {/* </div> */}
       </div>
     </div>
   );

@@ -12,10 +12,10 @@ const menu_items = [
     name: "Product",
     path: "/v1/product",
   },
-  // {
-  //   name: "Log",
-  //   path: "/v1/log",
-  // },
+  {
+    name: "Dashboard",
+    path: "/v1/dashboard",
+  },
   {
     name: "Device",
     path: "/v1/device",
@@ -45,9 +45,8 @@ function Menu() {
             >
               <div className="">
                 <div
-                  className={`font-extralight ${
-                    selected === index ? "text-[#4ABF78]" : "text-gray-700"
-                  } `}
+                  className={`font-extralight ${selected === index ? "text-[#4ABF78]" : "text-gray-700"
+                    } `}
                 >
                   <div className="">{item.name}</div>
                 </div>
