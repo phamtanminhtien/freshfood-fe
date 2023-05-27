@@ -57,7 +57,7 @@ function Welcome() {
                                 View Products
                             </button>
                         </Link>
-                        <Link to="product" className="text-center text-gray-600">
+                        <Link to="device" className="text-center text-gray-600">
                             <button className="bg-blue-500 text-xl text-white hover:bg-green-200 hover:text-slate-900 font-bold py-4 px-8 rounded-xl">
                                 Add Device
                             </button>
