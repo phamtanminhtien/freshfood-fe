@@ -1,7 +1,9 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Avatar } from "antd";
+import { Avatar, QRCode } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
+import AndroidIcon from "../../assets/android.png";
+import iOSIcon from "../../assets/ios.png";
 
 const contributors = [
     {
@@ -84,28 +86,48 @@ function Welcome() {
                 </div>
 
             </div>
-            <div>
-                <h1 className="text-2xl font-bold mb-4 text-center">Contributors</h1>
-                <div className="avatar-container flex justify-center items-center gap-10 mb-5">
-                    {contributors.map((contributor, index) => (
-                        <div className="flex flex-col justify-center items-center">
-                            <a
-                                key={index}
-                                href={`https://github.com/${contributor.githubUsername}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <Avatar
+
+            <div className="w-full flex items-center justify-around mb-2">
+                <div>
+                    <h3 className="text-md font-bold mb-4 text-center">Scan QR to download app</h3>
+                    <div className="flex gap-10">
+                        <QRCode
+                            errorLevel="H"
+                            size={128}
+                            value="https://play.google.com/store/apps"
+                            icon={AndroidIcon}
+                        />
+                        <QRCode
+                            errorLevel="H"
+                            size={128}
+                            value="https://www.apple.com/vn/app-store/"
+                            icon={iOSIcon}
+                        />
+                    </div>
+                </div>
+                <div>
+                    <h1 className="text-md font-bold mb-4 text-center">Contributors</h1>
+                    <div className="avatar-container flex justify-center items-center gap-10 mb-5">
+                        {contributors.map((contributor, index) => (
+                            <div className="flex flex-col justify-center items-center">
+                                <a
                                     key={index}
-                                    size={48}
-                                    src={contributor.avatarUrl}
-                                    alt={contributor.name}
+                                    href={`https://github.com/${contributor.githubUsername}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <Avatar
+                                        key={index}
+                                        size={48}
+                                        src={contributor.avatarUrl}
+                                        alt={contributor.name}
 
-                                />
-                            </a>
+                                    />
+                                </a>
 
-                        </div>
-                    ))}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
 
