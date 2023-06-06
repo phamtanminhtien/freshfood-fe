@@ -142,7 +142,7 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
     <div className="bg-white container mx-auto rounded-md p-2 min-h-[calc(100vh-60px)]">
       <div className="grid grid-cols-12">
         <div className="col-span-8 mr-4">
-          <div className="w-full h-full min-h-[600px] relative">
+          <div className="w-full pb-2 h-[calc(100vh-60px)] relative">
             <SearchPlace setDevice={setDevice}></SearchPlace>
             <MapContainer
               style={{ height: "100%", width: "100%" }}

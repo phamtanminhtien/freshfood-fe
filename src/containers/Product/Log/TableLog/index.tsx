@@ -10,6 +10,7 @@ import { Popover, Tooltip } from "antd";
 import { readableMapper } from "../../../../utils/readable-mapper";
 import objectHash from "object-hash";
 import { hashObject } from "../../../../utils/hash-object";
+import { convertToDMS } from "../../../../utils/convert-to-DMS";
 
 type Props = {
   data?: LogStruct[];
@@ -179,7 +180,10 @@ function TableLog({ data }: Props) {
               }
             >
               <a
-                href={`https://www.google.com/maps/@${longitude},${latitude},19z`}
+                href={`https://www.google.com/maps/place/${convertToDMS(
+                  +latitude,
+                  +longitude
+                )}/@${latitude},${longitude},17z`}
                 target="_blank"
                 className="cursor-pointer"
               >

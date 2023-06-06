@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { LogStruct } from "../../../../types/contracts/FreshFood";
 import { Table } from "antd";
+import { convertToDMS } from "../../../../utils/convert-to-DMS";
 
 type Props = {
   data: LogStruct;
@@ -46,7 +47,10 @@ function LogDelivery({ data }: Props) {
       <div className="w-[30%]">
         <a
           className="text-lg font-semibold flex items-center gap-1"
-          href={`https://www.google.com/maps/@${latitude},${longitude},19z`}
+          href={`https://www.google.com/maps/place/${convertToDMS(
+            +latitude,
+            +longitude
+          )}/@${latitude},${longitude},17z`}
           target="_blank"
         >
           Location Update

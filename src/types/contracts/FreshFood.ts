@@ -93,6 +93,8 @@ export interface FreshFoodInterface extends utils.Interface {
     "getOwnerByAddress(address)": FunctionFragment;
     "getOwnersOfProduct(uint256)": FunctionFragment;
     "getProduct(uint256)": FunctionFragment;
+    "getProductByName(string)": FunctionFragment;
+    "getProductByOrigin(string)": FunctionFragment;
     "getProductByOwner(address)": FunctionFragment;
     "getProducts()": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -130,6 +132,8 @@ export interface FreshFoodInterface extends utils.Interface {
       | "getOwnerByAddress"
       | "getOwnersOfProduct"
       | "getProduct"
+      | "getProductByName"
+      | "getProductByOrigin"
       | "getProductByOwner"
       | "getProducts"
       | "isApprovedForAll"
@@ -207,6 +211,14 @@ export interface FreshFoodInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getProduct",
     values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getProductByName",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getProductByOrigin",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "getProductByOwner",
@@ -324,6 +336,14 @@ export interface FreshFoodInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getProduct", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getProductByName",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getProductByOrigin",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getProductByOwner",
     data: BytesLike
@@ -537,6 +557,16 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[ProductStructOutput]>;
 
+    getProductByName(
+      _name: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[ProductStructOutput[]]>;
+
+    getProductByOrigin(
+      _origin: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[ProductStructOutput[]]>;
+
     getProductByOwner(
       _ownerAddr: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -713,6 +743,16 @@ export interface FreshFood extends BaseContract {
     overrides?: CallOverrides
   ): Promise<ProductStructOutput>;
 
+  getProductByName(
+    _name: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<ProductStructOutput[]>;
+
+  getProductByOrigin(
+    _origin: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<ProductStructOutput[]>;
+
   getProductByOwner(
     _ownerAddr: PromiseOrValue<string>,
     overrides?: CallOverrides
@@ -888,6 +928,16 @@ export interface FreshFood extends BaseContract {
       _productId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<ProductStructOutput>;
+
+    getProductByName(
+      _name: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<ProductStructOutput[]>;
+
+    getProductByOrigin(
+      _origin: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<ProductStructOutput[]>;
 
     getProductByOwner(
       _ownerAddr: PromiseOrValue<string>,
@@ -1108,6 +1158,16 @@ export interface FreshFood extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getProductByName(
+      _name: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getProductByOrigin(
+      _origin: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getProductByOwner(
       _ownerAddr: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -1274,6 +1334,16 @@ export interface FreshFood extends BaseContract {
 
     getProduct(
       _productId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getProductByName(
+      _name: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getProductByOrigin(
+      _origin: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

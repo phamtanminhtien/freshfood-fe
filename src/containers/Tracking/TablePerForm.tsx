@@ -7,6 +7,7 @@ import { hashObject } from "../../utils/hash-object";
 import { ColumnsType } from "antd/es/table";
 import { Circle, MapContainer, Polyline, TileLayer } from "react-leaflet";
 import LocationMarker from "../../components/LocationMarker";
+import { convertToDMS } from "../../utils/convert-to-DMS";
 
 type Props = {
   logs: LogExtra[];
@@ -83,7 +84,10 @@ const columns: ColumnsType<LogData> = [
       return (
         <a
           className="flex items-center gap-2 cursor-pointer"
-          href={`https://www.google.com/maps/@${latitude},${longitude},19z`}
+          href={`https://www.google.com/maps/place/${convertToDMS(
+            +latitude,
+            +longitude
+          )}/@${latitude},${longitude},17z`}
           target="_blank"
         >
           {latitude.slice(0, 7)}
@@ -117,7 +121,10 @@ const columns: ColumnsType<LogData> = [
       return (
         <a
           className="flex items-center gap-2 cursor-pointer"
-          href={`https://www.google.com/maps/@${latitude},${longitude},19z`}
+          href={`https://www.google.com/maps/place/${convertToDMS(
+            +latitude,
+            +longitude
+          )}/@${latitude},${longitude},17z`}
           target="_blank"
         >
           {longitude.slice(0, 7)}

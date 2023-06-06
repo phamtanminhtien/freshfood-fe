@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { getContract, useEth } from "../../stores/eth/ethSlice";
 import { ProductStruct } from "../../types/contracts/FreshFood";
 import { Card } from "./Card";
@@ -7,7 +7,7 @@ import CreateModal from "./CreateModal";
 import ProductDetail from "./ProductDetail";
 import Create from "./Log/Create";
 import LineChart from "../Dashboard/LineChart";
-import { Select } from "antd";
+import { Input, Select } from "antd";
 
 const VERIFY_OPTIONS = [
   {
@@ -20,15 +20,29 @@ const VERIFY_OPTIONS = [
   },
 ];
 
+const SEARCH_OPTIONS = [
+  {
+    label: "Name",
+    value: "name" as const,
+  },
+  {
+    label: "Origin",
+    value: "origin" as const,
+  },
+];
+
 function Product() {
   const [products, setProducts] = useState<ProductStruct[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [productSelected, setProductSelected] = useState<string | null>(null);
   const [reload, setReload] = useState<number>(1); // [1
   const eth = useEth();
+  const [searchOption, setSearchOption] = useState<"name" | "origin">("name");
   const [filterVerify, setFilterVerify] = useState<
     "verified" | "not-verified" | null
   >(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const getProducts = async () => {
     try {
       const contract = getContract();
@@ -59,6 +73,32 @@ function Product() {
     });
   }, [products, filterVerify]);
 
+  const handleSearch = useCallback(
+    async (value: string) => {
+      setLoading(true);
+      try {
+        const contract = getContract();
+        if (!value) {
+          await getProducts();
+          setLoading(false);
+          return;
+        }
+        let filter: ProductStruct[] = [];
+        if (searchOption === "name") {
+          filter = await contract.getProductByName(value);
+        } else {
+          filter = await contract.getProductByOrigin(value);
+        }
+
+        setProducts(filter);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [eth, searchOption]
+  );
+
   return (
     <div className="w-full grid grid-cols-4 container mx-auto h-[calc(100vh-60px)] overflow-hidden">
       <CreateModal
@@ -67,7 +107,24 @@ function Product() {
         getProducts={getProducts}
       />
       <div className="col-span-1 gap-2 flex flex-col border-r px-2 pt-2 h-[calc(100vh-60px)] overflow-auto">
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-2">
+          <Input.Search
+            onSearch={handleSearch}
+            loading={loading}
+            allowClear
+            addonBefore={
+              <Select
+                className="col-span-1"
+                options={SEARCH_OPTIONS}
+                placeholder="Search by"
+                value={searchOption}
+                onChange={(value) => setSearchOption(value)}
+              />
+            }
+            className="col-span-2"
+            placeholder="Search"
+          />
+
           <Select
             className="col-span-2"
             options={VERIFY_OPTIONS}

@@ -50,7 +50,10 @@ export const useEth = () =>
   useSelector((state: { eth: { value: EthState } }) => state.eth.value);
 
 export const getContract = () => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const provider = window.ethereum
+    ? new ethers.providers.Web3Provider(window.ethereum)
+    : new ethers.providers.JsonRpcProvider("https://eth.freshfood.lalo.com.vn");
+
   const contract = FreshFood__factory.connect(
     CONTRACT_ADDRESS,
     provider.getSigner()
