@@ -1,4 +1,9 @@
-import { StyleHTMLAttributes, useEffect, useState } from "react";
+import React, {
+  StyleHTMLAttributes,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -20,6 +25,7 @@ import {
   SENSOR_KEY,
 } from "../../../constant";
 import { readableMapper } from "../../../utils/readable-mapper";
+import { Skeleton } from "antd";
 
 ChartJS.register(
   CategoryScale,
@@ -47,7 +53,7 @@ type Dataset = {
 function LineChart({ productId, reload, className }: Props) {
   if (!productId) return null;
   const [product, setProduct] = useState<ProductStruct | null>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
   const [fullScreen, setFullScreen] = useState<boolean>(false);
@@ -60,10 +66,6 @@ function LineChart({ productId, reload, className }: Props) {
     }
   }, [eth, productId, reload]);
 
-  useEffect(() => {
-    getLogs();
-  }, [product?.logList, fullScreen]);
-
   const getLogs = async () => {
     if (product?.logList) {
       const arr = [];
@@ -75,19 +77,20 @@ function LineChart({ productId, reload, className }: Props) {
           )
         )
           continue;
-        arr.push(getLog(product.logList[i].objectId.toString()));
+        arr.push(product.logList[i].objectId.toString());
         labels.push(
           dayjs
             .unix(+product.logList[i].timestamp.toString())
             .format("DD/MM/YYYY")
         );
       }
-      const res = await Promise.all(arr);
+      const res = await objectStoreService.getByIds(arr);
+      const data = res.data;
 
       setLabels(labels);
       const _datasets = Object.keys(SENSOR_KEY).map((key) => ({
         label: readableMapper(SENSOR_KEY[key as keyof typeof SENSOR_KEY]),
-        data: res.map((item) => {
+        data: data.map((item) => {
           const sensor = item?.table.find(
             (i) => i.name === SENSOR_KEY[key as keyof typeof SENSOR_KEY]
           );
@@ -98,18 +101,22 @@ function LineChart({ productId, reload, className }: Props) {
         backgroundColor:
           SENSOR_BACKGROUND_COLOR[key as keyof typeof SENSOR_KEY] || "",
       }));
-      console.log(_datasets);
       setDatasets(_datasets);
     }
   };
 
+  useEffect(() => {
+    if (product?.logList) {
+      getLogs();
+      setLoading(false);
+    }
+  }, [product?.logList, fullScreen]);
+
   const getProduct = async () => {
     try {
-      setLoading(true);
       const contract = getContract();
       const product = await contract.getProduct(productId);
       setProduct(product);
-      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -143,6 +150,8 @@ function LineChart({ productId, reload, className }: Props) {
     labels,
     datasets,
   };
+
+  if (loading) return <Skeleton />;
 
   return (
     <div
@@ -201,4 +210,4 @@ function LineChart({ productId, reload, className }: Props) {
   );
 }
 
-export default LineChart;
+export default React.memo(LineChart);

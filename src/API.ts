@@ -1,6 +1,7 @@
 const API = {
   OBJECT_STORE: {
     GET: (id: string) => `/object-stores/${id}`,
+    GET_BY_IDS: "/object-stores/",
     POST: `/object-stores`,
     DELETE: (id: string) => `/object-stores/${id}`,
     GET_ALL: `/object-stores`,
