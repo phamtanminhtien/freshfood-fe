@@ -4,7 +4,16 @@ import { getContract, useEth } from "../../../stores/eth/ethSlice";
 import { LogStruct, ProductStruct } from "../../../types/contracts/FreshFood";
 import Log from "../Log";
 import { TYPE_PERFORM } from "../../Tracking";
-import { Dropdown, Form, Input, MenuProps, Modal, Table, message } from "antd";
+import {
+  Dropdown,
+  Form,
+  Input,
+  MenuProps,
+  Modal,
+  QRCode,
+  Table,
+  message,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
 import TableLog from "../Log/TableLog";
 import { ethers } from "ethers";
@@ -174,6 +183,15 @@ function ProductDetail({
           className="h-44 w-full object-cover rounded-2xl"
         />
         <div className="relative">
+          <div className="absolute w-10 h-10 scale-[0.2] hover:scale-[1] hover:shadow-2xl transition cursor-pointer">
+            <QRCode
+              size={200}
+              errorLevel="H"
+              value={"https://freshfood.lalo.com.vn/tracking/" + id}
+              icon="/src/assets/logo.png"
+            />
+          </div>
+
           <h1 className="text-2xl font-bold text-center pt-2 flex gap-2 justify-center items-center">
             #{product?.productId.toString()} {product?.name.toString()}
             {product?.verified && (

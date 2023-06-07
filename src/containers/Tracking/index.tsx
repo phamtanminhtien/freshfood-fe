@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { LogStruct, ProductStruct } from "../../types/contracts/FreshFood";
+import {
+  LogStruct,
+  OwnerStruct,
+  ProductStruct,
+} from "../../types/contracts/FreshFood";
 import { getContract } from "../../stores/eth/ethSlice";
 import {
   ObjectData,
@@ -8,6 +12,8 @@ import {
 } from "../../services/objectStoreService";
 import TablePerForm from "./TablePerForm";
 import DrawLine from "./DrawLine";
+import { isMobile } from "react-device-detect";
+import Mobile from "./Mobile";
 
 export type LogExtra = LogStruct & {
   object: ObjectData;
@@ -21,6 +27,7 @@ function Tracking() {
   const [product, setProduct] = React.useState<ProductStruct>();
   const [logs, setLogs] = React.useState<LogExtra[]>([]);
   const [typePerform, setTypePerform] = React.useState<TYPE_PERFORM>("TABLE");
+  const [owner, setOwner] = React.useState<OwnerStruct[]>();
 
   useEffect(() => {
     getProduct();
@@ -36,6 +43,8 @@ function Tracking() {
     try {
       const contract = getContract();
       const product = await contract.getProduct(id);
+      const owner = await contract.getOwnersOfProduct(id);
+      setOwner(owner);
       setProduct(product);
     } catch (error) {
       console.log(error);
@@ -107,6 +116,15 @@ function Tracking() {
         return <DrawLine {...props} />;
     }
   };
+
+  if (isMobile)
+    return (
+      <Mobile
+        product={product as ProductStruct}
+        logs={logs as LogExtra[]}
+        owner={owner as OwnerStruct[]}
+      />
+    );
 
   return (
     <div
@@ -193,8 +211,8 @@ function Tracking() {
         </div>
         <h1 className="text-2xl font-bold text-center pt-2 flex gap-2 justify-center items-center">
           #{product?.productId.toString()} {product?.name.toString()}
-          {product?.verified && (
-            <span className="text-green-600">
+          {product?.verified ? (
+            <span className="flex gap-2 justify-center items-center text-base font-normal bg-green-100 text-green-700 px-2 rounded py-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -207,9 +225,24 @@ function Tracking() {
                   clipRule="evenodd"
                 />
               </svg>
+              Verified by{" "}
+              <span className="font-bold">{owner?.[0].name.toString()}</span>
+            </span>
+          ) : (
+            <span className="flex gap-2 justify-center items-center text-base font-normal bg-yellow-100 text-yellow-700 px-2 rounded py-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-4 h-4"
+              >
+                <path d="M5.055 7.06c-1.25-.714-2.805.189-2.805 1.628v8.123c0 1.44 1.555 2.342 2.805 1.628L12 14.471v2.34c0 1.44 1.555 2.342 2.805 1.628l7.108-4.061c1.26-.72 1.26-2.536 0-3.256L14.805 7.06C13.555 6.346 12 7.25 12 8.688v2.34L5.055 7.06z" />
+              </svg>
+              Processing
             </span>
           )}
         </h1>
+
         {getPerform()}
       </div>
     </div>

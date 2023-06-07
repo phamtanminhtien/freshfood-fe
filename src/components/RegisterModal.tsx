@@ -12,7 +12,7 @@ import { getContract, setEthState, useEth } from "../stores/eth/ethSlice";
 
 type FromProps = {
   name: string;
-  description: string;
+  email: string;
 };
 
 function RegisterModal() {
@@ -26,7 +26,7 @@ function RegisterModal() {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const contract = getContract();
       setLoading(true);
-      const res = await contract.registerOwner(value.name, value.description, {
+      const res = await contract.registerOwner(value.name, value.email, {
         from: eth.account as string,
       });
       await provider.waitForTransaction(res.hash);
@@ -48,6 +48,7 @@ function RegisterModal() {
 
   return (
     <Modal
+      closable={false}
       open={!eth.ownerInfo?.name && !eth.isLoading}
       width={700}
       title="Verification is in progress"
@@ -96,21 +97,21 @@ function RegisterModal() {
                 },
               ]}
             >
-              <Input />
+              <Input type="text" placeholder="Name" />
             </Form.Item>
             <Form.Item
               labelCol={{ span: 4 }}
               wrapperCol={{ span: 20 }}
-              name="description"
-              label="Description"
+              name="email"
+              label="Email"
               rules={[
                 {
                   required: true,
-                  message: "Please input your description!",
+                  message: "Please input your email!",
                 },
               ]}
             >
-              <Input.TextArea />
+              <Input type="email" placeholder="Email" />
             </Form.Item>
           </div>
 
