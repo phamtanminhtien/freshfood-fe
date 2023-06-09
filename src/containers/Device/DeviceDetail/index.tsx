@@ -280,7 +280,7 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
             </MapContainer> */}
           </div>
         </div>
-        <div className="col-span-4">
+        <div className="col-span-4  h-[calc(100vh-60px)] overflow-auto pb-3 pr-3">
           <h2 className="text-lg font-bold text-center py-5">
             {id ? `Update Device` : "Add Device"}
           </h2>
