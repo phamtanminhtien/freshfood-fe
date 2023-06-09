@@ -1,4 +1,14 @@
 import {
+  Circle,
+  GoogleMap,
+  Marker,
+  MarkerF,
+  Polygon,
+  Polyline,
+  PolylineF,
+  useJsApiLoader,
+} from "@react-google-maps/api";
+import {
   Button,
   Form,
   Input,
@@ -6,31 +16,18 @@ import {
   message,
   notification,
   Select,
-  Switch,
 } from "antd";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import "leaflet/dist/leaflet.css";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import {
   Device,
   deviceService,
   Station,
 } from "../../../services/deviceService";
-import { AnimatePresence, motion } from "framer-motion";
 import { getContract, useEth } from "../../../stores/eth/ethSlice";
-import {
-  LayersControl,
-  MapContainer,
-  Marker,
-  Polyline,
-  Popup,
-  TileLayer,
-  useMap,
-  useMapEvents,
-} from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import SearchPlace from "../../../components/SearchPlace";
 import { ProductStruct } from "../../../types/contracts/FreshFood";
-import LocationMarker from "../LocationMarker";
 
 type Props = {
   id?: string;
@@ -61,13 +58,7 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
   }, [getProducts]);
 
   const [device, setDevice] = useState<Partial<Device>>({
-    stations: [
-      {
-        name: "HCMC University of Technology and Education",
-        longitude: 106.771906,
-        latitude: 10.850613,
-      },
-    ],
+    stations: [],
     active: false,
     serial: "",
   });
@@ -121,13 +112,13 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
 
   const polyline = useMemo(() => {
     if (device.stations) {
-      return device.stations.map((station) => [
-        station.latitude,
-        station.longitude,
-      ]);
+      return device.stations.map((station) => ({
+        lat: station.latitude,
+        lng: station.longitude,
+      }));
     }
     return [];
-  }, [device]);
+  }, [device, device.stations]);
 
   const disableSubmit = useMemo(() => {
     return (
@@ -138,13 +129,124 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
     );
   }, [device]);
 
+  const [map, setMap] = useState<any>(null);
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "",
+  });
+
+  const onLoad = useCallback(function callback(map: any) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    // const bounds = new window.google.maps.LatLngBounds({
+    //   lat: 10.850613,
+    //   lng: 106.771906,
+    // });
+    // map.fitBounds(bounds);
+    map.setCenter({ lat: 10.850613, lng: 106.771906 });
+    map.setZoom(16);
+
+    setMap(map);
+  }, []);
+
+  const onUnmount = useCallback(function callback(map: any) {
+    setMap(null);
+  }, []);
+
+  useEffect(() => {
+    setDevice({
+      ...device,
+      stations: [
+        ...(device.stations ? device.stations : []),
+        {
+          name: "HCMC University of Technology and Education",
+          longitude: 106.771906,
+          latitude: 10.850613,
+        },
+      ],
+    });
+  }, []);
+
+  const handleOnDragEnd = (e: any, index: any) => {
+    const newStations = device.stations?.map((s, i) => {
+      if (i === index) {
+        return {
+          ...s,
+          longitude: e.latLng.lng(),
+          latitude: e.latLng.lat(),
+        };
+      }
+      return s;
+    });
+    setDevice({ ...device, stations: newStations });
+  };
+
   return (
     <div className="bg-white container mx-auto rounded-md p-2 min-h-[calc(100vh-60px)]">
       <div className="grid grid-cols-12">
         <div className="col-span-8 mr-4">
           <div className="w-full pb-2 h-[calc(100vh-60px)] relative">
-            <SearchPlace setDevice={setDevice}></SearchPlace>
-            <MapContainer
+            {/* <SearchPlace setDevice={setDevice}></SearchPlace> */}
+            {isLoaded && (
+              <GoogleMap
+                mapContainerStyle={{ height: "100%", width: "100%" }}
+                zoom={16}
+                onLoad={onLoad}
+                onUnmount={onUnmount}
+                onClick={(e: any) => {
+                  setDevice({
+                    ...device,
+                    stations: [
+                      ...(device.stations ? device.stations : []),
+                      {
+                        name: "",
+                        longitude: e.latLng.lng(),
+                        latitude: e.latLng.lat(),
+                      },
+                    ],
+                  });
+                  map?.panTo(e.latLng);
+                }}
+              >
+                <>
+                  {polyline.length > 0 && (
+                    <PolylineF
+                      path={polyline as any}
+                      options={{
+                        strokeColor: "#0989ad",
+                        strokeOpacity: 1,
+                        strokeWeight: 3,
+                        icons: [
+                          {
+                            icon: {
+                              path: window.google.maps.SymbolPath
+                                .FORWARD_CLOSED_ARROW,
+                            },
+                            offset: "100%",
+                          },
+                        ],
+                      }}
+                    />
+                  )}
+
+                  {device.stations?.map((station, index) => (
+                    <>
+                      <MarkerF
+                        onDragEnd={(e: any) => {
+                          handleOnDragEnd(e, index);
+                        }}
+                        draggable
+                        key={index}
+                        position={{
+                          lat: station.latitude,
+                          lng: station.longitude,
+                        }}
+                      />
+                    </>
+                  ))}
+                </>
+              </GoogleMap>
+            )}
+            {/* <MapContainer
               style={{ height: "100%", width: "100%" }}
               center={[51.505, -0.09]}
               zoom={13}
@@ -162,7 +264,7 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
                 positions={polyline as any}
               />
               <LocationMarker device={device} setDevice={setDevice} />
-            </MapContainer>
+            </MapContainer> */}
           </div>
         </div>
         <div className="col-span-4">

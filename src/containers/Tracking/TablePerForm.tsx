@@ -1,13 +1,18 @@
-import React, { useMemo, useState } from "react";
-import { LogExtra } from ".";
+import {
+  GoogleMap,
+  MarkerF,
+  Polyline,
+  PolylineF,
+  useJsApiLoader,
+} from "@react-google-maps/api";
 import { Table } from "antd";
-import { SENSOR_NAME } from "../../constant";
-import dayjs from "dayjs";
-import { hashObject } from "../../utils/hash-object";
 import { ColumnsType } from "antd/es/table";
-import { Circle, MapContainer, Polyline, TileLayer } from "react-leaflet";
-import LocationMarker from "../../components/LocationMarker";
+import dayjs from "dayjs";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { LogExtra } from ".";
+import { SENSOR_NAME } from "../../constant";
 import { convertToDMS } from "../../utils/convert-to-DMS";
+import { hashObject } from "../../utils/hash-object";
 
 type Props = {
   logs: LogExtra[];
@@ -230,13 +235,73 @@ function TablePerForm({ logs }: Props) {
         }
   );
 
-  const polyline = useMemo(() => {
-    return logs
+  const [polyline, setPolyline] = useState<any[]>([]);
+
+  useEffect(() => {
+    const newA = logs
       .filter((i) => i.objectId === "delivery")
-      .map((i) => {
-        return i.location.toString().split(",");
-      });
+      .map((i) => ({
+        lat: +i.location.toString().split(",")[0],
+        lng: +i.location.toString().split(",")[1],
+      }));
+    setPolyline(newA);
   }, [logs]);
+
+  const [map, setMap] = useState<any>(null);
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "",
+  });
+
+  const onLoad = useCallback(function callback(map: any) {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    // const bounds = new window.google.maps.LatLngBounds({
+    //   lat: 10.850613,
+    //   lng: 106.771906,
+    // });
+    // map.fitBounds(bounds);
+    map.setCenter({ lat: 10.850613, lng: 106.771906 });
+    map.setZoom(1);
+
+    setMap(map);
+  }, []);
+
+  const onUnmount = useCallback(function callback(map: any) {
+    setMap(null);
+  }, []);
+
+  const renderPolyline = useMemo(() => {
+    if (isLoaded && polyline) {
+      return (
+        <PolylineF
+          path={polyline}
+          options={{
+            strokeColor: "#0989ad",
+            strokeOpacity: 1,
+            strokeWeight: 3,
+            icons: [
+              {
+                icon: {
+                  path: window.google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                },
+                offset: "100%",
+              },
+            ],
+          }}
+        />
+      );
+    }
+    return <></>;
+  }, [isLoaded, polyline]);
+
+  const renderMarker = useMemo(() => {
+    if (isLoaded && polyline) {
+      return polyline.map((i, index) => (
+        <MarkerF draggable key={index} position={i} />
+      ));
+    }
+    return <></>;
+  }, [isLoaded, polyline]);
 
   return (
     <div className="table-transparent flex w-screen px-4 gap-2">
@@ -272,36 +337,34 @@ function TablePerForm({ logs }: Props) {
       </div>
       {isShowMap && (
         <div className="w-[500px] rounded overflow-hidden">
-          <MapContainer
-            style={{ height: "100%", width: "100%" }}
-            center={[51.505, -0.09]}
-            zoom={13}
-            scrollWheelZoom={true}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-
-            <Polyline
-              pathOptions={{
-                color: "red",
-              }}
-              positions={polyline as any}
-            />
-            {/* 
-            {polyline.map((i) => (
-              <Circle
-                center={{
-                  lat: +i[0],
-                  lng: +i[1],
-                }}
-                radius={10}
-                color="#9a111139"
-              />
-            ))} */}
-            <LocationMarker locations={polyline as any} />
-          </MapContainer>
+          {isLoaded && polyline && (
+            <GoogleMap
+              mapContainerStyle={{ height: "100%", width: "100%" }}
+              zoom={16}
+              onLoad={onLoad}
+              onUnmount={onUnmount}
+            >
+              {renderPolyline}
+              {renderMarker}
+              {/* <Marker
+                  draggable
+                  position={{
+                    lat: 10.850613,
+                    lng: 106.771906,
+                  }}
+                /> */}
+              {/* {polyline.map((i, index) => (
+                  <Marker
+                    draggable
+                    key={index}
+                    position={{
+                      lat: 10.850613,
+                      lng: 106.771906,
+                    }}
+                  />
+                ))} */}
+            </GoogleMap>
+          )}
         </div>
       )}
     </div>
