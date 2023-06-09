@@ -21,9 +21,10 @@ export interface Location {
 
 type Props = {
   setDevice: React.Dispatch<React.SetStateAction<Partial<Device>>>;
+  map: any;
 };
 
-function SearchPlace({ setDevice }: Props) {
+function SearchPlace({ setDevice, map }: Props) {
   const [list, setList] = useState<SearchResponse[]>([]);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -64,7 +65,7 @@ function SearchPlace({ setDevice }: Props) {
   }, [query]);
 
   return (
-    <div className=" z-[1000] absolute top-3 right-3 w-[300px]">
+    <div className=" z-[1000] absolute top-3 left-3 w-[300px]">
       <div className="relative">
         <Input
           allowClear
@@ -102,6 +103,11 @@ function SearchPlace({ setDevice }: Props) {
                   },
                 ],
               }));
+              map.panTo({
+                lat: item.location.lat,
+                lng: item.location.lng,
+              });
+
               setQuery("");
               setList([]);
             }}

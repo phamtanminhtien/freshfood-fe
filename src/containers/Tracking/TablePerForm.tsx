@@ -250,7 +250,7 @@ function TablePerForm({ logs }: Props) {
   const [map, setMap] = useState<any>(null);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "",
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY as string,
   });
 
   const onLoad = useCallback(function callback(map: any) {

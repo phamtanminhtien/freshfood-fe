@@ -1,5 +1,6 @@
 import {
   Circle,
+  CircleF,
   GoogleMap,
   Marker,
   MarkerF,
@@ -28,6 +29,7 @@ import {
 } from "../../../services/deviceService";
 import { getContract, useEth } from "../../../stores/eth/ethSlice";
 import { ProductStruct } from "../../../types/contracts/FreshFood";
+import SearchPlace from "../../../components/SearchPlace";
 
 type Props = {
   id?: string;
@@ -58,7 +60,13 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
   }, [getProducts]);
 
   const [device, setDevice] = useState<Partial<Device>>({
-    stations: [],
+    stations: [
+      {
+        name: "HCMC University of Technology and Education",
+        longitude: 106.771906,
+        latitude: 10.850613,
+      },
+    ],
     active: false,
     serial: "",
   });
@@ -132,7 +140,7 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
   const [map, setMap] = useState<any>(null);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "",
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
   });
 
   const onLoad = useCallback(function callback(map: any) {
@@ -150,20 +158,6 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
 
   const onUnmount = useCallback(function callback(map: any) {
     setMap(null);
-  }, []);
-
-  useEffect(() => {
-    setDevice({
-      ...device,
-      stations: [
-        ...(device.stations ? device.stations : []),
-        {
-          name: "HCMC University of Technology and Education",
-          longitude: 106.771906,
-          latitude: 10.850613,
-        },
-      ],
-    });
   }, []);
 
   const handleOnDragEnd = (e: any, index: any) => {
@@ -185,7 +179,7 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
       <div className="grid grid-cols-12">
         <div className="col-span-8 mr-4">
           <div className="w-full pb-2 h-[calc(100vh-60px)] relative">
-            {/* <SearchPlace setDevice={setDevice}></SearchPlace> */}
+            <SearchPlace setDevice={setDevice} map={map}></SearchPlace>
             {isLoaded && (
               <GoogleMap
                 mapContainerStyle={{ height: "100%", width: "100%" }}
@@ -228,17 +222,36 @@ function DeviceDetail({ id: idFromProps, reload }: Props) {
                     />
                   )}
 
+                  {device?.stations?.map((station, index) => (
+                    <MarkerF
+                      animation={window.google.maps.Animation.DROP}
+                      onDragEnd={(e: any) => {
+                        handleOnDragEnd(e, index);
+                      }}
+                      draggable
+                      key={index}
+                      position={{
+                        lat: station.latitude,
+                        lng: station.longitude,
+                      }}
+                    />
+                  ))}
+
                   {device.stations?.map((station, index) => (
                     <>
-                      <MarkerF
-                        onDragEnd={(e: any) => {
-                          handleOnDragEnd(e, index);
-                        }}
-                        draggable
+                      <CircleF
                         key={index}
-                        position={{
+                        center={{
                           lat: station.latitude,
                           lng: station.longitude,
+                        }}
+                        radius={100}
+                        options={{
+                          strokeColor: "#0989ad",
+                          strokeOpacity: 0.8,
+                          strokeWeight: 1,
+                          fillColor: "#0989ad6b",
+                          fillOpacity: 0.35,
                         }}
                       />
                     </>
