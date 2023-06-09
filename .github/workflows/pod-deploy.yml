@@ -58,6 +58,7 @@ jobs:
             VITE_APP_BASE_URL=${{ secrets.VITE_APP_BASE_URL }}
             VITE_APP_CONTRACT_ADDRESS=${{ secrets.VITE_APP_CONTRACT_ADDRESS }}
             VITE_PINATA_JWT=${{ secrets.VITE_PINATA_JWT }}
+            VITE_GOOGLE_MAP_API_KEY=${{ secrets.VITE_GOOGLE_MAP_API_KEY }}
 
   deploy:
     runs-on: ubuntu-latest
