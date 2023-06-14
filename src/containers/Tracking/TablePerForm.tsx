@@ -221,16 +221,17 @@ function TablePerForm({ logs }: Props) {
           stt: index + 1,
           title: log.object.title,
           time: +log.timestamp.toString(),
-          temperature: log.object.table.find(
+          temperature: log.object?.table?.find(
             (item) => item.name === "temperature"
           )?.value,
-          humidity: log.object.table.find((item) => item.name === "humidity")
+          humidity: log.object?.table?.find((item) => item.name === "humidity")
             ?.value,
-          light: log.object.table.find((item) => item.name === "light")?.value,
-          soilMoisture: log.object.table.find(
+          light: log.object?.table?.find((item) => item.name === "light")
+            ?.value,
+          soilMoisture: log.object?.table?.find(
             (item) => item.name === "soilMoisture"
           )?.value,
-          safe: hashObject(log.object) === log.hash,
+          safe: hashObject(log?.object) === log.hash,
           location: log.location.toString(),
         }
   );
@@ -308,7 +309,7 @@ function TablePerForm({ logs }: Props) {
               }}
               options={{
                 icon: {
-                  url: "/src/assets/location.png",
+                  url: "/location.png",
                   scaledSize: new window.google.maps.Size(35, 35),
                 },
               }}
@@ -325,7 +326,7 @@ function TablePerForm({ logs }: Props) {
               }}
               options={{
                 icon: {
-                  url: "/src/assets/truck.png",
+                  url: "/truck.png",
                   scaledSize: new window.google.maps.Size(60, 35),
                 },
               }}
