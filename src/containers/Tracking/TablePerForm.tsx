@@ -261,7 +261,7 @@ function TablePerForm({ logs }: Props) {
     // });
     // map.fitBounds(bounds);
     map.setCenter({ lat: 10.850613, lng: 106.771906 });
-    map.setZoom(1);
+    map.setZoom(9);
 
     setMap(map);
   }, []);
@@ -296,7 +296,43 @@ function TablePerForm({ logs }: Props) {
 
   const renderMarker = useMemo(() => {
     if (isLoaded && polyline) {
-      return polyline.map((i, index) => <MarkerF key={index} position={i} />);
+      return polyline.map((i, index) => {
+        if (index === 0)
+          return (
+            <MarkerF
+              key={index}
+              position={i}
+              shape={{
+                coords: [0, 0, 0, 0],
+                type: "rect",
+              }}
+              options={{
+                icon: {
+                  url: "/src/assets/location.png",
+                  scaledSize: new window.google.maps.Size(35, 35),
+                },
+              }}
+            />
+          );
+        if (index === polyline.length - 1)
+          return (
+            <MarkerF
+              key={index}
+              position={i}
+              shape={{
+                coords: [0, 0, 0, 0],
+                type: "rect",
+              }}
+              options={{
+                icon: {
+                  url: "/src/assets/truck.png",
+                  scaledSize: new window.google.maps.Size(60, 35),
+                },
+              }}
+            />
+          );
+        return <MarkerF key={index} position={i} />;
+      });
     }
     return <></>;
   }, [isLoaded, polyline]);
@@ -338,7 +374,7 @@ function TablePerForm({ logs }: Props) {
           {isLoaded && polyline && (
             <GoogleMap
               mapContainerStyle={{ height: "100%", width: "100%" }}
-              zoom={16}
+              zoom={9}
               onLoad={onLoad}
               onUnmount={onUnmount}
             >
