@@ -65,7 +65,7 @@ function SearchPlace({ setDevice, map }: Props) {
   }, [query]);
 
   return (
-    <div className=" z-[1000] absolute top-3 left-3 w-[300px]">
+    <div className=" z-[1000] absolute top-3 left-[50%] w-[300px] -translate-x-1/2">
       <div className="relative">
         <Input
           allowClear
