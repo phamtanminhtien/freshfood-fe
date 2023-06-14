@@ -296,9 +296,7 @@ function TablePerForm({ logs }: Props) {
 
   const renderMarker = useMemo(() => {
     if (isLoaded && polyline) {
-      return polyline.map((i, index) => (
-        <MarkerF draggable key={index} position={i} />
-      ));
+      return polyline.map((i, index) => <MarkerF key={index} position={i} />);
     }
     return <></>;
   }, [isLoaded, polyline]);
