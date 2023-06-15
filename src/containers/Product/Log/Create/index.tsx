@@ -166,11 +166,7 @@ function Create(props: Props) {
               },
             ]}
           >
-            <DatePicker
-              format={"HH:mm DD/MM/YYYY"}
-              disabled={import.meta.env.PROD}
-              className="w-full"
-            />
+            <DatePicker format={"HH:mm DD/MM/YYYY"} className="w-full" />
           </Form.Item>
         </div>
       </div>
