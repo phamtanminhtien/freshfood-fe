@@ -11,6 +11,7 @@ export type Row = {
   value: string;
 };
 export type ObjectData = {
+  timestamp?: string;
   title: string;
   description: string;
   date: string;

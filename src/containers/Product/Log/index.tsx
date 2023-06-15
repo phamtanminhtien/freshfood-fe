@@ -141,7 +141,7 @@ function Log({
                 d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            {dayjs(objectData?.date).format("HH:mm DD/MM/YYYY")}
+            {dayjs(objectData?.timestamp).format("HH:mm DD/MM/YYYY")}
           </div>
           <div className="text-sm text-gray-500]">
             {objectData?.description}
