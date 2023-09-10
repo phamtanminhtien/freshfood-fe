@@ -9,7 +9,7 @@ const contributors = [
   {
     name: "Doan Khiet Thanh",
     avatarUrl:
-      "https://scontent.fsgn2-8.fna.fbcdn.net/v/t1.6435-9/84181118_2535380486674771_9025700599462625280_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=-mrlwst-oKkAX8rmkFN&_nc_ht=scontent.fsgn2-8.fna&oh=00_AfBzUFtL-aJPWkeWIXzOhMw08wRjuj2bR2WdgdfJdOKQnA&oe=6498DE74",
+      "https://avatars.githubusercontent.com/u/81890086?s=400&u=71d23d30e17aa0c49bb5c0bbe82eba5e019b7cc6&v=4",
     githubUsername: "doankhietthanh",
   },
   {
